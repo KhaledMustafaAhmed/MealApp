@@ -1,7 +1,16 @@
 package com.example.dishdash.dataLayer.model.pojo;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "meals")
 public class MealsItem{
+	@PrimaryKey
+	private String idMeal;
+	@Ignore
 	private Object strImageSource;
+
 	private String strIngredient10;
 	private String strIngredient12;
 	private String strIngredient11;
@@ -13,10 +22,10 @@ public class MealsItem{
 	private String strIngredient18;
 	private String strIngredient17;
 	private String strArea;
+	@Ignore
 	private Object strCreativeCommonsConfirmed;
 	private String strIngredient19;
 	private String strTags;
-	private String idMeal;
 	private String strInstructions;
 	private String strIngredient1;
 	private String strIngredient3;
@@ -36,7 +45,9 @@ public class MealsItem{
 	private String strMeasure13;
 	private String strMeasure10;
 	private String strMeasure11;
+	@Ignore
 	private Object dateModified;
+	@Ignore
 	private Object strDrinkAlternate;
 	private String strSource;
 	private String strMeasure9;

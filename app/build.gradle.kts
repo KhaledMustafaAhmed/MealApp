@@ -64,5 +64,13 @@ dependencies {
     // lottie
     implementation("com.airbnb.android:lottie:6.6.2")
 
+    //Room
+    implementation ("androidx.room:room-runtime:2.6.1")
+    annotationProcessor ("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-rxjava2:2.6.1")
 
+    //rxjava
+    val rxJavaVersion = "2.1.1"
+    implementation("io.reactivex.rxjava2:rxandroid:$rxJavaVersion")
+    implementation("io.reactivex.rxjava2:rxjava:$rxJavaVersion")
 }

@@ -7,18 +7,39 @@
     tools:context=".uiLayer.splash.SplashFragment">
 
 
-   <TextView
-       android:id="@+id/textView2"
+   <ImageView
+       android:id="@+id/iv_splash_image"
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_marginStart="174dp"
-       android:layout_marginTop="352dp"
-       android:layout_marginEnd="178dp"
-       android:layout_marginBottom="359dp"
-       android:text="splash Screen"
-       android:textSize="60sp"
+       android:layout_height="900dp"
+      android:src="@drawable/bg"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0"
+      android:scaleType="centerCrop"/>
+
+   <ImageView
+       android:id="@+id/iv_splash_logo"
+       android:layout_width="100dp"
+       android:layout_height="100dp"
+      android:src="@drawable/inverse_logo"
+      app:layout_constraintVertical_bias="0.1"
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"/>
+
+   <com.airbnb.lottie.LottieAnimationView
+       android:id="@+id/lottie"
+       app:lottie_autoPlay="true"
+       android:layout_width="wrap_content"
+       android:layout_height="200dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintVertical_bias="0"
        app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent" />
+       app:lottie_rawRes="@raw/splash"
+       app:layout_constraintTop_toBottomOf="@+id/iv_splash_logo" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

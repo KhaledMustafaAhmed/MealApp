@@ -5,4 +5,9 @@
     <color name="backgroundColor">#2C2F38</color>
     <color name="myPrimary" >#1385A0</color>
     <color name="mySecondary">#6A9CAD</color>
+
+
+    <color name="purple">#ba53de</color>
+    <color name="pink">#f469a9</color>
+    <color name="blue">#88bef5</color>
 </resources>
