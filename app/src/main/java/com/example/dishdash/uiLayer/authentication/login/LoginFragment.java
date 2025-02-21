@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
@@ -22,6 +23,7 @@ import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository
 
 public class LoginFragment extends Fragment implements ILogin {
     LoginPresenter loginPresenter;
+    LoginContract loginContract;
     EditText et_login_password, et_login_email;
     TextView tv_login_create_account ;
     Button btn_login;
@@ -78,13 +80,15 @@ public class LoginFragment extends Fragment implements ILogin {
     @Override
     public void onLoginSuccess() {
         hideProgressBar();
+        Toast.makeText(getContext(), "login success", Toast.LENGTH_SHORT).show();
         //loginPresenter.getCurrentUser();
-        /* show snakbar and navigate to home screen  */
+        /* show snakbar and navigate to home screen */
     }
 
     @Override
     public void onLoginFail(String errorMessage) {
         hideProgressBar();
+        Toast.makeText(getContext(), "login failed", Toast.LENGTH_SHORT).show();
         /* show snackbar to display the error message */
 
     }
@@ -97,14 +101,13 @@ public class LoginFragment extends Fragment implements ILogin {
         hideProgressBar();
         switch (message){
             case ILogin.EMAIL:
-                /*  */
+                et_login_email.setError("Invalid Email!");
                 break;
             case ILogin.PASSWORD:
-                /*  */
+                et_login_password.setError("Password is to short!");
                 break;
 
             case ILogin.BOTH:
-                /*  */
                 break;
         }
     }

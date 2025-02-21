@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "823975160432",
+    "project_id": "mealapp-3d952",
+    "storage_bucket": "mealapp-3d952.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823975160432:android:5ecc0e2db99456be3be2b5",
+        "android_client_info": {
+          "package_name": "com.example.dishdash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSvvXMFzVTZo6SCiPrX4cixAc_LrRfLgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

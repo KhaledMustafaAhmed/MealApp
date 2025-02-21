@@ -6,6 +6,7 @@ import android.util.Patterns;
 import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseCallback;
 import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPresenter implements LoginContract {
     ILogin iLogin;
@@ -18,29 +19,29 @@ public class LoginPresenter implements LoginContract {
 
     @Override
     public void validateData(Pair<String, String> userInfo) {
-        if(!Patterns.EMAIL_ADDRESS.matcher(userInfo.first.trim()).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(userInfo.first.trim()).matches()) {
             iLogin.onValidateFail(ILogin.EMAIL);
             return;
         }
 
-        if(userInfo.second.trim().length()<6){
+        if (userInfo.second.trim().length() < 6) {
             iLogin.onValidateFail(ILogin.PASSWORD);
             return;
         }
-        iLogin.onValidateSuccess(new User("no-name",userInfo.first.trim(), userInfo.second.trim()));
+        iLogin.onValidateSuccess(new User("no-name", userInfo.first.trim(), userInfo.second.trim()));
     }
 
     @Override
     public void doLoginWithFirebase(User user) {
-        firebaseRepository.login(user, new FirebaseCallback() {
-            @Override
-            public void onSuccess(FirebaseUser user) {
-                iLogin.onLoginSuccess();
-            }
-
+        firebaseRepository.loginWithFirebase(user, new FirebaseCallback() {
             @Override
             public void onFailure(String errorMessage) {
                 iLogin.onLoginFail(errorMessage);
+            }
+
+            @Override
+            public void onSuccess(FirebaseUser user) {
+                iLogin.onLoginSuccess();
             }
         });
     }
