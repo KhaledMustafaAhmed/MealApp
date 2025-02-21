@@ -1,10 +1,13 @@
 package com.example.dishdash.uiLayer.authentication.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -16,18 +19,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dishdash.HomeActivity;
+import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends Fragment implements ILogin {
     LoginPresenter loginPresenter;
-    LoginContract loginContract;
     EditText et_login_password, et_login_email;
     TextView tv_login_create_account ;
     Button btn_login;
     ProgressBar login_progress_bar;
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -44,6 +50,7 @@ public class LoginFragment extends Fragment implements ILogin {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        login_progress_bar = view.findViewById(R.id.login_progress_bar);
         et_login_password = view.findViewById(R.id.et_login_password);
         et_login_email = view.findViewById(R.id.et_login_email);
         tv_login_create_account = (TextView) view.findViewById(R.id.tv_login_create_account);
@@ -53,6 +60,7 @@ public class LoginFragment extends Fragment implements ILogin {
             @Override
             public void onClick(View v) {
                 /* Navigate to signup page */
+                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signupFragment);
             }
         });
         btn_login = view.findViewById(R.id.btn_login);
@@ -81,16 +89,14 @@ public class LoginFragment extends Fragment implements ILogin {
     public void onLoginSuccess() {
         hideProgressBar();
         Toast.makeText(getContext(), "login success", Toast.LENGTH_SHORT).show();
-        //loginPresenter.getCurrentUser();
-        /* show snakbar and navigate to home screen */
+        startActivity(new Intent(getContext(), HomeActivity.class));
+        getActivity().finish();
     }
 
     @Override
     public void onLoginFail(String errorMessage) {
         hideProgressBar();
         Toast.makeText(getContext(), "login failed", Toast.LENGTH_SHORT).show();
-        /* show snackbar to display the error message */
-
     }
     @Override
     public void onValidateSuccess(User user) {
@@ -106,7 +112,6 @@ public class LoginFragment extends Fragment implements ILogin {
             case ILogin.PASSWORD:
                 et_login_password.setError("Password is to short!");
                 break;
-
             case ILogin.BOTH:
                 break;
         }

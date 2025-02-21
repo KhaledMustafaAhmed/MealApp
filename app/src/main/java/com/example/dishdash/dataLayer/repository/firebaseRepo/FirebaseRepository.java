@@ -2,9 +2,10 @@ package com.example.dishdash.dataLayer.repository.firebaseRepo;
 
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.User;
+import com.google.firebase.auth.FirebaseUser;
 
 public class FirebaseRepository implements IFirebaseRepo {
-    private FirebaseRemoteDataSource firebaseRemoteDataSource;
+    private final FirebaseRemoteDataSource firebaseRemoteDataSource;
 
     public FirebaseRepository(FirebaseRemoteDataSource _firebaseRemoteDataSource){
         firebaseRemoteDataSource = _firebaseRemoteDataSource;
@@ -18,5 +19,10 @@ public class FirebaseRepository implements IFirebaseRepo {
     @Override
     public void signupWithFirebase(User user, FirebaseCallback callback) {
         firebaseRemoteDataSource.signup(user, callback);
+    }
+
+    @Override
+    public FirebaseUser getCurrentUser() {
+        return  firebaseRemoteDataSource.getCurrentUser();
     }
 }

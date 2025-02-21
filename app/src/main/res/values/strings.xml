@@ -17,4 +17,8 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="let_s_get_started">Let\'s get started.</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="home">HOME</string>
+    <string name="search">SEARCH</string>
+    <string name="favourites">FAVOURITES</string>
+    <string name="plans">PLANS</string>
 </resources>

@@ -32,6 +32,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -59,4 +60,9 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     // Also add the dependency for the Google Play services library and specify its version
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    // lottie
+    implementation("com.airbnb.android:lottie:6.6.2")
+
+
 }

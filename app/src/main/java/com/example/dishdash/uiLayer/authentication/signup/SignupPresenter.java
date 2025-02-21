@@ -9,7 +9,7 @@ import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository
 import com.example.dishdash.uiLayer.uiHelper.Triple;
 import com.google.firebase.auth.FirebaseUser;
 
-public class SignupPresenter implements  SignupContract{
+public class SignupPresenter implements  SignupContract, FirebaseCallback{
     private final FirebaseRepository firebaseRepository;
     private final ISignup iSignup;
     public SignupPresenter(ISignup iSignup,FirebaseRepository firebaseRepository){
@@ -38,16 +38,18 @@ public class SignupPresenter implements  SignupContract{
 
     @Override
     public void doSignupWithFirebase(User user) {
-        firebaseRepository.signupWithFirebase(user, new FirebaseCallback() {
-            @Override
-            public void onSuccess(FirebaseUser user) {
-                iSignup.onSignupSuccess();
-            }
+        firebaseRepository.signupWithFirebase(user, this);
+    }
 
-            @Override
-            public void onFailure(String errorMessage) {
-                iSignup.onSignupFail(errorMessage);
-            }
-        });
+    @Override
+    public void onSuccess(FirebaseUser user) {
+        iSignup.onSignupSuccess();
+
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+        iSignup.onSignupFail(errorMessage);
+
     }
 }

@@ -8,7 +8,7 @@ import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseCallback;
 import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginPresenter implements LoginContract {
+public class LoginPresenter implements LoginContract, FirebaseCallback {
     ILogin iLogin;
     FirebaseRepository firebaseRepository;
 
@@ -33,16 +33,16 @@ public class LoginPresenter implements LoginContract {
 
     @Override
     public void doLoginWithFirebase(User user) {
-        firebaseRepository.loginWithFirebase(user, new FirebaseCallback() {
-            @Override
-            public void onFailure(String errorMessage) {
-                iLogin.onLoginFail(errorMessage);
-            }
+        firebaseRepository.loginWithFirebase(user, this);
+    }
 
-            @Override
-            public void onSuccess(FirebaseUser user) {
-                iLogin.onLoginSuccess();
-            }
-        });
+    @Override
+    public void onSuccess(FirebaseUser user) {
+        iLogin.onLoginSuccess();
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+        iLogin.onLoginFail(errorMessage);
     }
 }

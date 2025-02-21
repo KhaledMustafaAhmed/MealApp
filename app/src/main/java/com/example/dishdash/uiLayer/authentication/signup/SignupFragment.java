@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
@@ -27,7 +29,7 @@ public class SignupFragment extends Fragment implements ISignup {
     private TextView loginButton;
     private SignupPresenter signupPresenter;
 
-
+private View view;
     public SignupFragment() {
         // Required empty public constructor
     }
@@ -61,6 +63,7 @@ public class SignupFragment extends Fragment implements ISignup {
             @Override
             public void onClick(View v) {
                 //TODO navigate to login fragment in nav graph
+                Navigation.findNavController(v).navigate(R.id.action_signupFragment_to_loginFragment);
             }
         });
 
@@ -72,6 +75,7 @@ public class SignupFragment extends Fragment implements ISignup {
         createAccountButton = (Button) view.findViewById(R.id.btn_signup_create_account);
         progressBar = (ProgressBar) view.findViewById(R.id.pb_signup);
         loginButton = (TextView) view.findViewById(R.id.tv_signup_loginbtn);
+        this.view = view;
     }
 
     @Override
@@ -89,12 +93,15 @@ public class SignupFragment extends Fragment implements ISignup {
     @Override
     public void onSignupSuccess() {
         //TODO shows snackbar and navigate to login fragment
+        Toast.makeText(getContext(), "Create Account is Done! Check your mail to verify!", Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment);
     }
 
     @Override
     public void onSignupFail(String errorMessage) {
         hideProgressBar();
         // TODO snackbar shows the message
+        Toast.makeText(getContext(),errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase;
 
+import android.app.Activity;
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.example.dishdash.dataLayer.model.User;
@@ -20,7 +23,7 @@ public class FirebaseRemoteDataSource implements IAuthFirebase {
 
     @Override
     public void login(User user, FirebaseCallback firebaseCallback){
-        firebaseAuth.signInWithEmailAndPassword(user.getEmail(),user.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(user.getEmail(),user.getPassword()).addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
@@ -36,20 +39,25 @@ public class FirebaseRemoteDataSource implements IAuthFirebase {
                     }
         });
     }
-
     @Override
     public void signup(User user, FirebaseCallback callback) {
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener((new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            firebaseUser.sendEmailVerification();
                             callback.onSuccess(firebaseUser);
                         }else{
                             callback.onFailure("Signup Failed try again!");
                         }
                     }
-                });
+                }));
+    }
+
+
+    public FirebaseUser getCurrentUser(){
+        return  firebaseAuth.getCurrentUser();
     }
 }
