@@ -1,15 +1,22 @@
 package com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes;
 
+import android.util.Log;
+
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.interfaces.APIService;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.interfaces.MealsRemoteDataSource;
-import com.example.dishdash.dataLayer.model.pojo.MeaList;
+import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
+import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 
+
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
+    private static final String TAG = "MealsRemoteSourceImpl";
+
     private static final String URL = "https://www.themealdb.com/api/json/v1/1/";
     APIService apiService;
     private static MealsRemoteSourceImpl instance = null;
@@ -34,4 +41,11 @@ public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
     public Single<MeaList> getRandoMeal() {
         return apiService.getRandoMeal();
     }
+
+    @Override
+    public Observable<PopularList> getPopularItems(String category) {
+        Log.e(TAG, "getPopularItems: in remote" );
+        return apiService.getPopularItems(category);
+    }
+
 }

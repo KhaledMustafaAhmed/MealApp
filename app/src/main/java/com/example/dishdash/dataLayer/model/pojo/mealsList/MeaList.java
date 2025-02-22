@@ -1,4 +1,4 @@
-package com.example.dishdash.dataLayer.model.pojo;
+package com.example.dishdash.dataLayer.model.pojo.mealsList;
 
 import java.util.List;
 
@@ -7,5 +7,9 @@ public class MeaList{
 
 	public List<MealsItem> getMeals(){
 		return meals;
+	}
+
+	public int getSize(){
+		return meals.size();
 	}
 }

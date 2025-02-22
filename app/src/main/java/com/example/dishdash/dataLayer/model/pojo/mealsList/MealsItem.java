@@ -1,4 +1,4 @@
-package com.example.dishdash.dataLayer.model.pojo;
+package com.example.dishdash.dataLayer.model.pojo.mealsList;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
