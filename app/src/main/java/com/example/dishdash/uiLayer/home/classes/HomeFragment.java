@@ -1,9 +1,11 @@
 package com.example.dishdash.uiLayer.home.classes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,28 +17,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.airbnb.lottie.L;
 import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
-import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
+import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
 import com.example.dishdash.uiLayer.home.adapters.PopularAdapter;
 import com.example.dishdash.uiLayer.home.interfaces.IHomeView;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements IHomeView {
     private static final String TAG = "HomeFragment";
+    CardView cv_random_meal;
     ImageView iv_random_meal;
     TextView tv_random_meal_name;
     HomePresenter homePresenter;
     PopularAdapter popularAdapter;
     RecyclerView recyclerView;
+    MeaList meaList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,6 +60,7 @@ public class HomeFragment extends Fragment implements IHomeView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        cv_random_meal= view.findViewById(R.id.cv_random_meal);
         iv_random_meal = view.findViewById(R.id.iv_random_meal);
         tv_random_meal_name = view.findViewById(R.id.tv_random_meal_name);
         recyclerView = view.findViewById(R.id.rv_popular_meals);
@@ -70,10 +73,19 @@ public class HomeFragment extends Fragment implements IHomeView {
         popularAdapter.notifyDataSetChanged();
         homePresenter.getRandoMeal();
         homePresenter.getPopularItems("Beef");
+        cv_random_meal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
+                intent.putExtra("MEAL_ID", meaList.getMeals().get(0).getIdMeal());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public void receiveRandoMeal(MeaList meaList) {
+        this.meaList = meaList;
         Log.e(TAG, "receiveRandoMeal: " );
         tv_random_meal_name.setText(meaList.getMeals().get(0).getStrMeal());
         Glide.with(requireContext())

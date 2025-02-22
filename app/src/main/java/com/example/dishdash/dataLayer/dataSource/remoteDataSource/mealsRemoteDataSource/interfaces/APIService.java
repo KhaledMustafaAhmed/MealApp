@@ -14,4 +14,7 @@ public interface APIService {
 
     @GET("filter.php")
     public Observable<PopularList> getPopularItems(@Query("c") String category);
+
+    @GET("lookup.php")
+    public Single<MeaList> getMealByID(@Query("i") String mealID);
 }

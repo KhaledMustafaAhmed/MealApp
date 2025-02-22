@@ -10,4 +10,6 @@ public interface IMealsRepository {
     public Single<MeaList> getRandoMeal();
 
     public Observable<PopularList> getPopularItems(String category);
+
+    public Single<MeaList> getMealByID(String mealID);
 }

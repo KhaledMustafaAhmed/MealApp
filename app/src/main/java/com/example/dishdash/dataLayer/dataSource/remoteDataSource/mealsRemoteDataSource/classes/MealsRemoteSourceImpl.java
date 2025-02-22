@@ -48,4 +48,9 @@ public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
         return apiService.getPopularItems(category);
     }
 
+    @Override
+    public Single<MeaList> getMealByID(String mealID) {
+        return apiService.getMealByID(mealID);
+    }
+
 }

@@ -35,5 +35,10 @@ public class MealsRepository implements IMealsRepository{
         return mealsRemoteSourceImpl.getPopularItems(category) ;
     }
 
+    @Override
+    public Single<MeaList> getMealByID(String mealID) {
+        return mealsRemoteSourceImpl.getMealByID(mealID);
+    }
+
 
 }
