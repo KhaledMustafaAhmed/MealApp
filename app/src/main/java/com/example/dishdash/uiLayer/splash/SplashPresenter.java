@@ -1,6 +1,6 @@
 package com.example.dishdash.uiLayer.splash;
 
-import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SplashPresenter implements SplashContract{

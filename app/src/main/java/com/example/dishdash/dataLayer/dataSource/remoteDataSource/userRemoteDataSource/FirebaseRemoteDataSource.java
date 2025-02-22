@@ -1,13 +1,10 @@
-package com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase;
-
-import android.app.Activity;
-import android.content.Context;
+package com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource;
 
 import androidx.annotation.NonNull;
 
 import com.example.dishdash.dataLayer.model.User;
-import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseCallback;
-import com.example.dishdash.dataLayer.repository.firebaseRepo.IAuthFirebase;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseCallback;
+import com.example.dishdash.dataLayer.repository.userRepo.IAuthFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

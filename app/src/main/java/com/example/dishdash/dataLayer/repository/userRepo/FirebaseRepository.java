@@ -1,6 +1,6 @@
-package com.example.dishdash.dataLayer.repository.firebaseRepo;
+package com.example.dishdash.dataLayer.repository.userRepo;
 
-import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
+import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.User;
 import com.google.firebase.auth.FirebaseUser;
 

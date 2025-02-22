@@ -1,4 +1,4 @@
-package com.example.dishdash.dataLayer.repository.firebaseRepo;
+package com.example.dishdash.dataLayer.repository.userRepo;
 
 import com.google.firebase.auth.FirebaseUser;
 

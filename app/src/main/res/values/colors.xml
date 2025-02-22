@@ -2,9 +2,9 @@
 <resources>
     <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="backgroundColor">#2C2F38</color>
-    <color name="myPrimary" >#1385A0</color>
-    <color name="mySecondary">#6A9CAD</color>
+    <color name="backgroundColor">#FFFFFFFF</color>
+    <color name="myPrimary" >#f469a9</color>
+    <color name="mySecondary">#f52c56</color>
 
 
     <color name="purple">#ba53de</color>

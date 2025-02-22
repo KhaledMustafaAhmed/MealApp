@@ -73,4 +73,15 @@ dependencies {
     val rxJavaVersion = "2.1.1"
     implementation("io.reactivex.rxjava2:rxandroid:$rxJavaVersion")
     implementation("io.reactivex.rxjava2:rxjava:$rxJavaVersion")
+
+    //intuit
+    implementation("com.intuit.sdp:sdp-android:1.0.6") // scalable size unit
+    implementation("com.intuit.ssp:ssp-android:1.0.6")
+
+    //gif
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.17")
+
+    implementation("androidx.room:room-rxjava2:2.6.1")
+
+    implementation("com.squareup.retrofit2:adapter-rxjava2:2.7.1")
 }

@@ -17,16 +17,22 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
-
+    private BottomNavigationView bottomNavView;
+    private NavHostFragment navHostFragment;
+    private NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment);
-            NavController navController = navHostFragment.getNavController();
-            BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
-            NavigationUI.setupWithNavController(bottomNavView, navController);
+        bottomNavView = findViewById(R.id.bottom_nav_view);
+        setupNavigation();
+    }
+
+
+    private void setupNavigation(){
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(bottomNavView, navController);
     }
 }

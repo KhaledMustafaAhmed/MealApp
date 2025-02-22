@@ -17,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dishdash.R;
-import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
+import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.User;
-import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.example.dishdash.uiLayer.uiHelper.Triple;
 
 public class SignupFragment extends Fragment implements ISignup {

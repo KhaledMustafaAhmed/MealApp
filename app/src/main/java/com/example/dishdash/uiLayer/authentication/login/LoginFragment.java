@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -20,12 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dishdash.HomeActivity;
-import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
-import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
+import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.User;
-import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 
 public class LoginFragment extends Fragment implements ILogin {
     LoginPresenter loginPresenter;

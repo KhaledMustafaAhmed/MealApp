@@ -16,12 +16,9 @@ import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.dishdash.HomeActivity;
-import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
-import com.example.dishdash.dataLayer.dataSource.remoteDataSource.firebase.FirebaseRemoteDataSource;
-import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 
 public class SplashFragment extends Fragment {
     SplashPresenter splashPresenter;

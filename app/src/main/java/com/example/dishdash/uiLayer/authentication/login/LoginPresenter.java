@@ -4,8 +4,8 @@ import android.util.Pair;
 import android.util.Patterns;
 
 import com.example.dishdash.dataLayer.model.User;
-import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseCallback;
-import com.example.dishdash.dataLayer.repository.firebaseRepo.FirebaseRepository;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseCallback;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPresenter implements LoginContract, FirebaseCallback {
