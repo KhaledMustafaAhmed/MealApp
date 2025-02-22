@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements IHomeView {
     private static final String TAG = "HomeFragment";
+    Button btn_logout;
     CardView cv_random_meal;
     ImageView iv_random_meal;
     TextView tv_random_meal_name;
@@ -81,6 +83,14 @@ public class HomeFragment extends Fragment implements IHomeView {
                 startActivity(intent);
             }
         });
+
+        btn_logout = (Button) view.findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homePresenter.logout();
+            }
+        });
     }
 
     @Override
@@ -98,4 +108,10 @@ public class HomeFragment extends Fragment implements IHomeView {
         Log.e(TAG, "receivePopularItems: " );
         popularAdapter.setPopularList(popularList);
     }
+
+    @Override
+    public void doLogout() {
+        //TODO NAVIGATE TO LOGIN SCREEN
+    }
+
 }

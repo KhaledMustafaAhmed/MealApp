@@ -5,6 +5,8 @@ import android.util.Log;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 
+import java.util.Locale;
+
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -41,4 +43,6 @@ public class MealDetailsPresenter implements MealDetailsContract {
                     }
                 });
     }
+
+
 }

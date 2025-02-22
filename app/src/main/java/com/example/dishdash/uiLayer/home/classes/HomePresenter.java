@@ -73,4 +73,9 @@ public class HomePresenter implements HomeContract {
                     }
                 });
     }
+
+    @Override
+    public void logout() {
+        
+    }
 }

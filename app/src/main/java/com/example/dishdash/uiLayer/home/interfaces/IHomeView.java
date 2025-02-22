@@ -10,4 +10,6 @@ public interface IHomeView {
     public void receiveRandoMeal(MeaList meaList);
 
     public void receivePopularItems(List<PopularItem> popularList);
+
+    public void doLogout();
 }

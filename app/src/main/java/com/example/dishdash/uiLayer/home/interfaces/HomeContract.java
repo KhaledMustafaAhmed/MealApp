@@ -4,4 +4,6 @@ public interface HomeContract {
     public void getRandoMeal();
 
     public void getPopularItems(String category);
+
+    public void logout();
 }
