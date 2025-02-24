@@ -31,4 +31,8 @@
     <string name="see_all_meal_categories">See All Meal Categories</string>
     <string name="see_all_meals_categories">See All Meals Categories</string>
     <string name="see_popular_meals_in_the_country">See Popular Meals in the Country</string>
+    <string name="meals_sorted_just_for_you">Meals Sorted Just For You!</string>
+    <string name="most_loved_dishes">Most Loved Dishes</string>
+    <string name="discover_all_categories">Discover All Categories!</string>
+    <string name="must_try_national_dishes">Must-Try National Dishes!</string>
 </resources>

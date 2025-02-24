@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +33,9 @@ import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.example.dishdash.uiLayer.home.adapters.CategoryAdapter;
 import com.example.dishdash.uiLayer.home.adapters.CountryAdapter;
+import com.example.dishdash.uiLayer.home.interfaces.ICategory;
+import com.example.dishdash.uiLayer.home.interfaces.ICountry;
+import com.example.dishdash.uiLayer.home.interfaces.IPopular;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
 import com.example.dishdash.uiLayer.home.adapters.PopularAdapter;
 import com.example.dishdash.uiLayer.home.interfaces.IHomeView;
@@ -39,7 +43,7 @@ import com.example.dishdash.uiLayer.home.interfaces.IHomeView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements IHomeView {
+public class HomeFragment extends Fragment implements IHomeView, ICategory, ICountry, IPopular {
     private static final String TAG = "HomeFragment";
     Button btn_logout;
     CardView cv_random_meal;
@@ -84,15 +88,15 @@ public class HomeFragment extends Fragment implements IHomeView {
                 MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance()),
                 new FirebaseRepository(new FirebaseRemoteDataSource()));
 
-        popularAdapter = new PopularAdapter(requireContext(),new ArrayList<>());
-        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>());
-        countryAdapter = new CountryAdapter(new ArrayList<>());
+        popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>());
+        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this);
+        countryAdapter = new CountryAdapter(this,new ArrayList<>());
         setRecycleViewForPopular();
         setRecycleViewForCategory();
         setRecycleViewForCountry();
 
         homePresenter.getRandoMeal();
-        homePresenter.getPopularItems("Beef");
+        homePresenter.getMealsBasedOnCategory("Beef");
         homePresenter.getAllCategories("list");
         homePresenter.getAllCountries("list");
 
@@ -173,4 +177,22 @@ public class HomeFragment extends Fragment implements IHomeView {
         getActivity().finish();
     }
 
+    @Override
+    public void onCategoryItemClick(String categoryName) {
+       Navigation.findNavController(getView())
+               .navigate(HomeFragmentDirections.actionHomeFragmentToCategoryMealsFragment(categoryName));
+    }
+
+    @Override
+    public void onCountryItemClick(String countryName) {
+        Navigation.findNavController(getView())
+                .navigate(HomeFragmentDirections.actionHomeFragmentToCountryMealsFragment(countryName));
+    }
+
+    @Override
+    public void onPopularMealClicked(String mealID) {
+        Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
+        intent.putExtra("MEAL_ID", mealID);
+        startActivity(intent);
+    }
 }

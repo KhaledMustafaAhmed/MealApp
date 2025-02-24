@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_150sdp"
+    android:layout_height="@dimen/_150sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/_15sdp"
+    app:cardUseCompatPadding="true"
+    android:elevation="@dimen/_3sdp">
+    <ImageView
+        android:id="@+id/iv_meal_by_country_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_meal_by_country_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="Meal Name"
+        android:gravity="center"
+        android:fontFamily="@font/bomb"
+        android:background="#80FFFFFF"
+        android:textColor="@color/white"
+        android:padding="@dimen/_10sdp"/>
+
+</com.google.android.material.card.MaterialCardView>

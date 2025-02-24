@@ -15,7 +15,10 @@ public interface APIService {
     public Single<MeaList> getRandoMeal();
 
     @GET("filter.php")
-    public Observable<PopularList> getPopularItems(@Query("c") String category);
+    public Single<PopularList> getMealsBasedOnCategory(@Query("c") String category);
+
+    @GET("filter.php")
+    public Single<PopularList> getMealsBasedOnCountry(@Query("a") String country);
 
     @GET("lookup.php")
     public Single<MeaList> getMealByID(@Query("i") String mealID);
@@ -24,6 +27,6 @@ public interface APIService {
     public Single<CategoryList> getAllCategories(@Query("c") String categoryCode);
 
 
-    @GET("list.php?a=list")
+    @GET("list.php")
     public Single<CountryList> getAllCountries(@Query("a") String countryCode);
 }

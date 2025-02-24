@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryItem;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
+import com.example.dishdash.uiLayer.home.interfaces.ICategory;
 
 import java.util.List;
 import java.util.zip.Inflater;
@@ -24,10 +25,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private static final String CATEGORY_IMAGE_URL = "https://www.themealdb.com/images/category/";
     private Context context;
     private List<CategoryItem> categoryList;
+    private ICategory iCategory;
 
-    public CategoryAdapter(Context context, List<CategoryItem> categoryList){
+    public CategoryAdapter(Context context, List<CategoryItem> categoryList, ICategory iCategory){
         this.context =context;
         this.categoryList = categoryList;
+        this.iCategory = iCategory;
     }
 
     public void setCategoryList(List<CategoryItem> categoryList) {
@@ -49,6 +52,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 .into(holder.iv_category_image_item);
         Log.d(TAG, "onBindViewHolder: ");
         holder.tv_category_name_item.setText(categoryList.get(position).getStrCategory());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iCategory.onCategoryItemClick(categoryList.get(position).getStrCategory());
+            }
+        });
     }
 
     @Override

@@ -51,30 +51,24 @@ public class HomePresenter implements HomeContract {
     }
 
     @Override
-    public void getPopularItems(String category) {
-        mealsRepository.getPopularItems(category)
+    public void getMealsBasedOnCategory(String category) {
+        mealsRepository.getMealsBasedOnCategory(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<PopularList>() {
+                .subscribe(new SingleObserver<PopularList>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.e(TAG, "onSubscribe: in getPopularItems home presenter " );
+
                     }
 
                     @Override
-                    public void onNext(PopularList popularList) {
-                        Log.e(TAG, "onNext: in getPopularItems home presenter " );
+                    public void onSuccess(PopularList popularList) {
                         iHomeView.receivePopularItems(popularList.getPopularItemList());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(TAG, "onError: in getPopularItems home presenter " );
-                    }
 
-                    @Override
-                    public void onComplete() {
-                        Log.e(TAG, "onComplete: in getPopularItems home presenter " );
                     }
                 });
     }

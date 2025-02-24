@@ -11,7 +11,10 @@ import io.reactivex.Single;
 public interface IMealsRepository {
     public Single<MeaList> getRandoMeal();
 
-    public Observable<PopularList> getPopularItems(String category);
+    public Single<PopularList> getMealsBasedOnCategory(String category);
+
+    public Single<PopularList> getMealsBasedOnCountry(String country);
+
 
     public Single<MeaList> getMealByID(String mealID);
 

@@ -32,9 +32,14 @@ public class MealsRepository implements IMealsRepository{
     }
 
     @Override
-    public Observable<PopularList> getPopularItems(String category) {
+    public Single<PopularList> getMealsBasedOnCategory(String category) {
         Log.e(TAG, "getPopularItems: in repo" );
-        return mealsRemoteSourceImpl.getPopularItems(category) ;
+        return mealsRemoteSourceImpl.getMealsBasedOnCategory(category) ;
+    }
+
+    @Override
+    public Single<PopularList> getMealsBasedOnCountry(String country) {
+        return mealsRemoteSourceImpl.getMealsBasedOnCountry(country);
     }
 
     @Override

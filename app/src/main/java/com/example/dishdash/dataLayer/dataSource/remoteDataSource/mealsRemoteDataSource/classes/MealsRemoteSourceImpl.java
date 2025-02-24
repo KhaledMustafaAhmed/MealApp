@@ -45,9 +45,14 @@ public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
     }
 
     @Override
-    public Observable<PopularList> getPopularItems(String category) {
+    public Single<PopularList> getMealsBasedOnCategory(String category) {
         Log.e(TAG, "getPopularItems: in remote" );
-        return apiService.getPopularItems(category);
+        return apiService.getMealsBasedOnCategory(category);
+    }
+
+    @Override
+    public Single<PopularList> getMealsBasedOnCountry(String country) {
+        return apiService.getMealsBasedOnCountry(country);
     }
 
     @Override

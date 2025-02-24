@@ -16,6 +16,7 @@ import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
+import com.example.dishdash.uiLayer.home.interfaces.IPopular;
 
 import java.util.List;
 
@@ -23,9 +24,12 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularV
     private static final String TAG = "PopularAdapter";
     private Context context;
     private List<PopularItem> popularList;
-    public PopularAdapter(Context context,  List<PopularItem> popularList){
+
+    private IPopular iPopular;
+    public PopularAdapter(Context context, IPopular iPopular, List<PopularItem> popularList){
         this.context = context;
         this.popularList = popularList;
+        this.iPopular = iPopular;
     }
 
     public void setPopularList( List<PopularItem> popularList) {
@@ -52,6 +56,13 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularV
                     .into(holder.iv_popular_meal_item);
         }
         holder.tv_popular_meal_item.setText(popularList.get(position).getStrMeal());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iPopular.onPopularMealClicked(popularList.get(position).getIdMeal());
+            }
+        });
     }
 
     @Override

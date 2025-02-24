@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryItem;
+import com.example.dishdash.uiLayer.home.interfaces.ICountry;
 
 import java.util.List;
 
@@ -18,8 +19,11 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
     private List<CountryItem> countryList;
 
-    public CountryAdapter(List<CountryItem> countryList){
+   private  ICountry iCountry;
+
+    public CountryAdapter(ICountry iCountry,List<CountryItem> countryList){
         this.countryList = countryList;
+        this.iCountry = iCountry;
         notifyDataSetChanged();
     }
 
@@ -37,6 +41,12 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     @Override
     public void onBindViewHolder(@NonNull CountryAdapter.CountryViewHolder holder, int position) {
         showAreaFlag(holder,position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iCountry.onCountryItemClick(countryList.get(position).getStrArea());
+            }
+        });
     }
 
     @Override
