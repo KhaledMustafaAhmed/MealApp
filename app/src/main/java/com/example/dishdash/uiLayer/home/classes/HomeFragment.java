@@ -17,13 +17,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
+import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
+import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryItem;
+import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryItem;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
+import com.example.dishdash.uiLayer.home.adapters.CategoryAdapter;
+import com.example.dishdash.uiLayer.home.adapters.CountryAdapter;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
 import com.example.dishdash.uiLayer.home.adapters.PopularAdapter;
 import com.example.dishdash.uiLayer.home.interfaces.IHomeView;
@@ -39,8 +47,11 @@ public class HomeFragment extends Fragment implements IHomeView {
     TextView tv_random_meal_name;
     HomePresenter homePresenter;
     PopularAdapter popularAdapter;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView, rv_categories, rv_area;
     MeaList meaList;
+    CategoryAdapter categoryAdapter;
+    CountryAdapter countryAdapter;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,15 +77,25 @@ public class HomeFragment extends Fragment implements IHomeView {
         iv_random_meal = view.findViewById(R.id.iv_random_meal);
         tv_random_meal_name = view.findViewById(R.id.tv_random_meal_name);
         recyclerView = view.findViewById(R.id.rv_popular_meals);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        homePresenter = new HomePresenter(this, MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance()));
+        rv_categories = (RecyclerView) view.findViewById(R.id.rv_categories);
+        rv_area =(RecyclerView) view.findViewById(R.id.rv_area);
+
+        homePresenter = new HomePresenter(this,
+                MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance()),
+                new FirebaseRepository(new FirebaseRemoteDataSource()));
+
         popularAdapter = new PopularAdapter(requireContext(),new ArrayList<>());
-        recyclerView.setAdapter(popularAdapter);
-        popularAdapter.notifyDataSetChanged();
+        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>());
+        countryAdapter = new CountryAdapter(new ArrayList<>());
+        setRecycleViewForPopular();
+        setRecycleViewForCategory();
+        setRecycleViewForCountry();
+
         homePresenter.getRandoMeal();
         homePresenter.getPopularItems("Beef");
+        homePresenter.getAllCategories("list");
+        homePresenter.getAllCountries("list");
+
         cv_random_meal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +112,29 @@ public class HomeFragment extends Fragment implements IHomeView {
                 homePresenter.logout();
             }
         });
+    }
+
+    private void setRecycleViewForPopular(){
+        LinearLayoutManager linearLayoutManagerOne = new LinearLayoutManager(getContext());
+        linearLayoutManagerOne.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(linearLayoutManagerOne);
+        recyclerView.setAdapter(popularAdapter);
+        popularAdapter.notifyDataSetChanged();
+    }
+
+    private void setRecycleViewForCategory(){
+        LinearLayoutManager linearLayoutManagerTwo = new LinearLayoutManager(getContext());
+        linearLayoutManagerTwo.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rv_categories.setLayoutManager(linearLayoutManagerTwo);
+        rv_categories.setAdapter(categoryAdapter);
+       // categoryAdapter.notifyDataSetChanged();
+    }
+
+    private void setRecycleViewForCountry(){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rv_area.setLayoutManager(linearLayoutManager);
+        rv_area.setAdapter(countryAdapter);
     }
 
     @Override
@@ -110,8 +154,23 @@ public class HomeFragment extends Fragment implements IHomeView {
     }
 
     @Override
+    public void receiveAllCategoriesItems(List<CategoryItem> categoryList) {
+        Log.d(TAG, "receiveAllCategoriesItems: ");
+        categoryAdapter.setCategoryList(categoryList);
+    }
+
+    @Override
+    public void receiveAllCountriesItems(List<CountryItem> areaList) {
+        Log.d(TAG, "receiveAllCountriesItems: ");
+        countryAdapter.setCountryList(areaList);
+    }
+
+    @Override
     public void doLogout() {
         //TODO NAVIGATE TO LOGIN SCREEN
+        Toast.makeText(getContext(),"Logout Success!",Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(getActivity(), MainActivity.class));
+        getActivity().finish();
     }
 
 }

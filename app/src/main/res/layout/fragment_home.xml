@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <LinearLayout
                 android:id="@+id/ll_home_header"
                 android:layout_width="match_parent"
@@ -27,7 +26,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:weightSum="3">
-
+                <!--header name-->
                 <TextView
                     android:id="@+id/tv_home_header"
                     android:layout_width="0dp"
@@ -38,8 +37,7 @@
                     android:textColor="@color/myPrimary"
                     android:textStyle="bold"
                     android:textSize="@dimen/_20ssp"/>
-
-
+                <!--logout button-->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_logout"
                     android:layout_width="0dp"
@@ -49,8 +47,6 @@
                     android:text="@string/logout"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold"/>
-
-
             </LinearLayout>
 
             <TextView
@@ -78,15 +74,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_random_meal_header">
-
                 <ImageView
                     android:id="@+id/iv_random_meal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     android:scaleType="centerCrop"
                     android:background="@color/myPrimary" />
-
                 <TextView
                     android:id="@+id/tv_random_meal_name"
                     android:layout_width="match_parent"
@@ -106,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_25sdp"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:text="@string/popular_meals_in_country"
+                android:text="@string/popular_meals"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_random_meal"
                 android:textSize="@dimen/_16ssp"
@@ -130,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_25sdp"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:text="@string/categories"
+                android:text="@string/see_all_meals_categories"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_popular_meals"
                 android:textSize="@dimen/_16ssp"
@@ -144,9 +137,33 @@
                 android:layout_marginStart="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="parent"
+                tools:listitem="@layout/category_item"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_categories"/>
 
+            <TextView
+                android:id="@+id/tv_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_25sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:text="@string/see_popular_meals_in_the_country"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_categories"
+                android:textSize="@dimen/_16ssp"
+                android:fontFamily="@font/somebold"
+                android:textColor="@color/pink"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_area"
+                tools:listitem="@layout/country_item"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_120sdp"
+                android:layout_marginStart="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_area"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

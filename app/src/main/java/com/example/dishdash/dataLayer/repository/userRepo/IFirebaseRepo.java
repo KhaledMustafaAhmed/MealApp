@@ -7,4 +7,6 @@ public interface IFirebaseRepo {
     public void loginWithFirebase(User user, FirebaseCallback callback);
     public void signupWithFirebase(User user, FirebaseCallback callback);
     public FirebaseUser getCurrentUser();
+
+    public void logout();
 }

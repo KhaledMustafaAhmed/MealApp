@@ -5,5 +5,9 @@ public interface HomeContract {
 
     public void getPopularItems(String category);
 
+    public void getAllCategories(String categoryListCode);
+
+    public void getAllCountries(String countryListCode);
+
     public void logout();
 }

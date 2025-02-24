@@ -25,4 +25,9 @@ public class FirebaseRepository implements IFirebaseRepo {
     public FirebaseUser getCurrentUser() {
         return  firebaseRemoteDataSource.getCurrentUser();
     }
+
+    @Override
+    public void logout() {
+        firebaseRemoteDataSource.logout();
+    }
 }

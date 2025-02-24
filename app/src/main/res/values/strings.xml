@@ -26,4 +26,9 @@
     <string name="popular_meals_in_country">Popular meals in country</string>
     <string name="categories">Categories</string>
     <string name="instructions">Instructions</string>
+    <string name="countries">Countries</string>
+    <string name="popular_meals">Popular meals</string>
+    <string name="see_all_meal_categories">See All Meal Categories</string>
+    <string name="see_all_meals_categories">See All Meals Categories</string>
+    <string name="see_popular_meals_in_the_country">See Popular Meals in the Country</string>
 </resources>

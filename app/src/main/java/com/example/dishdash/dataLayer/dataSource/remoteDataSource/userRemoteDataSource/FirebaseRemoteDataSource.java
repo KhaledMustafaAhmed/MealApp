@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseCallback;
-import com.example.dishdash.dataLayer.repository.userRepo.IAuthFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -51,6 +50,11 @@ public class FirebaseRemoteDataSource implements IAuthFirebase {
                         }
                     }
                 }));
+    }
+
+    @Override
+    public void logout() {
+        firebaseAuth.signOut();
     }
 
 
