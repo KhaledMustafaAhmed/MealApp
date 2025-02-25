@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface IMealDetailsView {
     public void getMealDetails(MealsItem meal);
+
+    public void showInsetFavSuccess();
+    public void showInsetFavFailed();
 }

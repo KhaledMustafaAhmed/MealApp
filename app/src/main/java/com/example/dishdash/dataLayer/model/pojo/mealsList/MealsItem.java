@@ -11,9 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Entity(tableName = "meals")
 public class MealsItem{
-	@PrimaryKey
 	private String idMeal;
 	private String strMeal;
 	private Object strDrinkAlternate;
@@ -64,11 +62,10 @@ public class MealsItem{
 	private String strMeasure19;
 	private String strMeasure20;
 	private String strSource;
-	@Ignore
 	private Object strImageSource;
-	@Ignore
+
 	private Object strCreativeCommonsConfirmed;
-	@Ignore
+
 	private Object dateModified;
 
 	public Object getStrImageSource(){

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.dishdash.R;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
@@ -53,7 +54,7 @@ public class CountryMealsFragment extends Fragment implements ICountryMealsViews
         rv_meals_by_country = (RecyclerView) view.findViewById(R.id.rv_meals_by_country);
         countryMealsAdapter = new CountryMealsAdapter(this, requireContext(), new ArrayList<>());
         setupRecycleView();
-        countryMealsPresenter = new CountryMealsPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance()),
+        countryMealsPresenter = new CountryMealsPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(getContext())),
                 this);
         countryMealsPresenter.getMealsBasedOnCountries(countryName);
     }

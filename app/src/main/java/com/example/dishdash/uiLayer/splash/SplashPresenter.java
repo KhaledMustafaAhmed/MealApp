@@ -11,6 +11,6 @@ public class SplashPresenter implements SplashContract{
     }
     @Override
     public FirebaseUser getCurrentUser() {
-       return  firebaseRepository.getCurrentUser();
+        return firebaseRepository.getCurrentUser();
     }
 }

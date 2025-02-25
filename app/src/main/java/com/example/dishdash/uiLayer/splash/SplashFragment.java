@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class SplashFragment extends Fragment {
                 iv_splash_logo.animate().translationY(1400).setDuration(1000);
                 lottie.animate().translationY(1400).setDuration(1000);
                 if(splashPresenter.getCurrentUser() != null){
+                    Log.d("TAG", "user id: "+splashPresenter.getCurrentUser().getUid());
                     startActivity(new Intent(getContext(), HomeActivity.class));
                     getActivity().finish();
                 }else{

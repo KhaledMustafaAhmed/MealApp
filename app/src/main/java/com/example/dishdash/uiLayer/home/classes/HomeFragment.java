@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryItem;
@@ -84,9 +85,7 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
         rv_categories = (RecyclerView) view.findViewById(R.id.rv_categories);
         rv_area =(RecyclerView) view.findViewById(R.id.rv_area);
 
-        homePresenter = new HomePresenter(this,
-                MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance()),
-                new FirebaseRepository(new FirebaseRemoteDataSource()));
+        homePresenter = new HomePresenter(this,MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(getContext())),new FirebaseRepository(new FirebaseRemoteDataSource()));
 
         popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>());
         categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this);

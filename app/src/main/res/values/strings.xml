@@ -35,4 +35,7 @@
     <string name="most_loved_dishes">Most Loved Dishes</string>
     <string name="discover_all_categories">Discover All Categories!</string>
     <string name="must_try_national_dishes">Must-Try National Dishes!</string>
+    <string name="web_client_id">823975160432-r6g30in1fnrgveuji0uh6svujqft6oo6.apps.googleusercontent.com</string>
+    <string name="or_sign_in_with">Or sign in with</string>
+    <string name="continue_as_a_guest">Continue as a Guest</string>
 </resources>

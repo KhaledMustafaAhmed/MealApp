@@ -8,12 +8,12 @@
     android:layout_marginVertical="32dp"
     android:layout_marginHorizontal="32dp"
     tools:context=".uiLayer.authentication.login.LoginFragment">
-
     <ImageView
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/login"
+        android:layout_marginTop="@dimen/_100sdp"
         android:layout_marginVertical="32dp"
         android:id="@+id/iv_login_icon"
         />
@@ -77,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:text="@string/login"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/_12sdp"
             android:textSize="16sp"/>
         <ProgressBar
             android:visibility="gone"
@@ -86,11 +86,35 @@
             android:id="@+id/login_progress_bar"
             android:layout_gravity="center"
             android:layout_marginTop="12dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_guest_option"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:text="@string/continue_as_a_guest"
+            android:layout_gravity="center"
+            android:layout_alignParentEnd="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/or_sign_in_with"
+            android:textSize="@dimen/_12sdp"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="#919191"
+            android:textStyle= "bold"/>
+        <ImageView
+            android:id="@+id/iv_login_with_google"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:src="@drawable/google"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
         android:layout_below="@+id/form_layout"
         android:gravity="center" >
 

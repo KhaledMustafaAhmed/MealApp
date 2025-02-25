@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
+import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MealsItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
+import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,17 +28,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class MealDetailsActivity extends AppCompatActivity implements IMealDetailsView {
-    AppBarLayout abl_favourites;
-
     ImageView iv_favourites_toolbar, iv_meal_details_category, iv_meal_details_area;
-
     FloatingActionButton fab_favourite, fab_calender;
-
     TextView tv_details_meal_category_name, tv_details_meal_area_name, tv_instruction_details;
-
     RecyclerView rv_ingredient_measure;
     MealDetailsPresenter mealDetailsPresenter;
     DetailedMealAdapter detailedMealAdapter;
+    MealsItem meal;
 
     private static final String CATEGORY_PHOTOS_URL = "https://www.themealdb.com/images/category/";
 
@@ -50,9 +50,9 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         rv_ingredient_measure.setAdapter(detailedMealAdapter);
         Intent inComingIntent = getIntent();
         mealDetailsPresenter = new MealDetailsPresenter(this,
-                MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance()));
+                MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(this)), new FirebaseRepository(new FirebaseRemoteDataSource()));
         mealDetailsPresenter.getMeal(inComingIntent.getStringExtra("MEAL_ID"));
-
+        setClickListenersForButtons();
     }
 
     private void initUI(){
@@ -71,10 +71,9 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         fab_favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mealDetailsPresenter.addMealToFavourites(mealDetailsPresenter.getUserID(), meal);
             }
         });
-
 
         fab_calender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +84,7 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
     }
     @Override
     public void getMealDetails(MealsItem meal) {
+        this.meal = meal;
         if(meal.getStrMealThumb() != null){
             Glide.with(this)
                     .load(meal.getStrMealThumb())
@@ -108,6 +108,18 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         }
         detailedMealAdapter.setIngredientsAndMeasures(meal.getIngredientsAndMeasures(meal));
     }
+
+    @Override
+    public void showInsetFavSuccess() {
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showInsetFavFailed() {
+        Toast.makeText(this, "failed", Toast.LENGTH_SHORT).show();
+    }
+
     private void showAreaPicture(String area){
         switch (area){
             case "american": iv_meal_details_area.setImageResource(R.drawable.american); break;
