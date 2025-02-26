@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="@dimen/_120sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/_15sdp"
+    app:cardUseCompatPadding="true"
+    android:elevation="@dimen/_4sdp">
+    <ImageView
+        android:id="@+id/iv_weekly_plan_meal_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@color/myPrimary" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_week_plan_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="Date: "
+        android:gravity="left"
+        android:textSize="@dimen/_20ssp"
+        android:paddingStart="@dimen/_5sdp"
+        android:fontFamily="@font/somebold"
+        android:background="#80A0A0A0"
+        android:textColor="@color/white"
+        android:padding="@dimen/_10sdp"/>
+    <ImageView
+        android:id="@+id/iv_del_week_plan"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:src="@drawable/delete"
+        android:layout_gravity="right|bottom"
+        android:layout_marginEnd="@dimen/_10sdp"/>
+
+</com.google.android.material.card.MaterialCardView>
