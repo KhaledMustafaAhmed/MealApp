@@ -18,14 +18,17 @@ import android.widget.ImageView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.dishdash.HomeActivity;
 import com.example.dishdash.R;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 
-public class SplashFragment extends Fragment {
+public class SplashFragment extends Fragment implements ISplashView {
     SplashPresenter splashPresenter;
     ImageView iv_splash_image, iv_splash_logo;
     LottieAnimationView lottie;
     boolean var = false;
+    View _view;
 
     public SplashFragment() {
         // Required empty public constructor
@@ -46,26 +49,67 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//.setStartDelay(4000)
+        _view = view;
         iv_splash_image = view.findViewById(R.id.iv_splash_image);
         iv_splash_logo = view.findViewById(R.id.iv_splash_logo);
         lottie = view.findViewById(R.id.lottie);
 
-        splashPresenter = new SplashPresenter(new FirebaseRepository(new FirebaseRemoteDataSource()));
-        new Handler().postDelayed(new Runnable() {
+        splashPresenter = new SplashPresenter(this, new FirebaseRepository(new FirebaseRemoteDataSource()),
+                new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(getContext())));
+        iv_splash_image.animate().translationY(-1600).setDuration(2000);
+        iv_splash_logo.animate().translationY(1400).setDuration(2000);
+        lottie.animate().translationY(1400).setDuration(2000);
+        Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_loginFragment);
+
+        splashPresenter.checkUser();
+      /*  new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                iv_splash_image.animate().translationY(-1600).setDuration(1000);
-                iv_splash_logo.animate().translationY(1400).setDuration(1000);
-                lottie.animate().translationY(1400).setDuration(1000);
-                if(splashPresenter.getCurrentUser() != null){
-                    Log.d("TAG", "user id: "+splashPresenter.getCurrentUser().getUid());
-                    startActivity(new Intent(getContext(), HomeActivity.class));
-                    getActivity().finish();
-                }else{
-                    Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_loginFragment);
-                }
+
             }
-        },4000);
+        },5000);
+    }*/
+
+    /*@Override
+    public void receiveCurrentUserID(String user_id) {
+        if(user_id != null){
+            Log.d("TAG", "user id: "+splashPresenter.getCurrentUser().getUid());
+            startActivity(new Intent(getContext(), HomeActivity.class));
+            getActivity().finish();
+        }else{
+            Navigation.findNavController(getView()).navigate(R.id.action_splashFragment_to_loginFragment);
+        }
+    }*/
+/*
+        @Override
+        public void userFound () {
+            Log.d("TAG", "userFound: ");
+            startActivity(new Intent(getContext(), HomeActivity.class));
+            getActivity().finish();
+        }
+
+        @Override
+        public void userNotFound () {
+            Log.d("TAG", "userNotFound: ");
+            Navigation.findNavController(_view).navigate(R.id.action_splashFragment_to_loginFragment);
+        }*/
+/*
+    if(splashPresenter.getCurrentUser() != null){
+        Log.d("TAG", "user id: "+splashPresenter.getCurrentUser().getUid());
+        startActivity(new Intent(getContext(), HomeActivity.class));
+        getActivity().finish();
+    }else{
+        Navigation.findNavController(getView()).navigate(R.id.action_splashFragment_to_loginFragment);
+    }*/
+    }
+
+    @Override
+    public void userFound() {
+
+    }
+
+    @Override
+    public void userNotFound() {
+
     }
 }

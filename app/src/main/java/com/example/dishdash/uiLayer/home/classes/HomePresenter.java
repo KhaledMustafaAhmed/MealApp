@@ -1,7 +1,11 @@
 package com.example.dishdash.uiLayer.home.classes;
 
-import android.util.Log;
+import static io.reactivex.Single.zip;
 
+import android.util.Log;
+import android.util.Pair;
+
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryList;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
@@ -11,6 +15,10 @@ import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.example.dishdash.uiLayer.home.interfaces.HomeContract;
 import com.example.dishdash.uiLayer.home.interfaces.IHomeView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,10 +30,12 @@ public class HomePresenter implements HomeContract {
     IHomeView iHomeView;
     MealsRepository mealsRepository;
     FirebaseRepository firebaseRepository;
-    public HomePresenter(IHomeView iHomeView,MealsRepository mealsRepository, FirebaseRepository firebaseRepository){
+    SharedPrefManager sharedPrefManager;
+    public HomePresenter(IHomeView iHomeView,MealsRepository mealsRepository, FirebaseRepository firebaseRepository, SharedPrefManager sharedPrefManager){
         this.iHomeView = iHomeView;
         this.mealsRepository = mealsRepository;
         this.firebaseRepository = firebaseRepository;
+        this.sharedPrefManager = sharedPrefManager;
     }
 
     @Override
@@ -47,6 +57,16 @@ public class HomePresenter implements HomeContract {
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: in Home Presenter" );
                     }
+                });
+    }
+
+    @Override
+    public void getMealByID(String meal_id) {
+        mealsRepository.getMealByID(meal_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meaList -> {
+                   iHomeView.receiveMealByID(meaList);
                 });
     }
 
@@ -114,6 +134,40 @@ public class HomePresenter implements HomeContract {
     @Override
     public void logout() {
         firebaseRepository.logout();
+        sharedPrefManager.setUserId("");
         iHomeView.doLogout();
+    }
+
+    @Override
+    public void checkMealOfTheDay() {
+        Observable<String> dateFromPref = sharedPrefManager.getDATE_ID().asObservable();
+        Observable<String> mealFromPref = sharedPrefManager.getMEAL_ID().asObservable();
+
+        Observable.zip(mealFromPref, dateFromPref, (MEAL_ID, DATE_Id) -> {
+            return new Pair<>(MEAL_ID, DATE_Id);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(pair -> {
+            if(pair.second != null &&  pair.second.equals(getCurrentDate())){
+                // هنا لو التواريخ متساوية معناها اننا ف نفس اليوم ف اجيب نفس ال meal
+                // TODO get meal by id (pair.first meal_id)
+                getMealByID(pair.first);
+                Log.d(TAG, "checkMealOfTheDay: yes ");
+            }else{
+                //TODO get random meal
+                Log.d(TAG, "checkMealOfTheDay: no");
+                getRandoMeal();
+            }
+        });
+    }
+
+    @Override
+    public void saveMealOfDay(String meal_id) {
+        sharedPrefManager.setMealId(meal_id);
+        sharedPrefManager.setDate(getCurrentDate());
+        Log.d(TAG, "saveMealOfDay: ");
+    }
+
+    private String getCurrentDate(){
+        SimpleDateFormat sdf =new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(new Date());
     }
 }

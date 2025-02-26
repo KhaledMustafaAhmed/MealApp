@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.dishdash.HomeActivity;
 import com.example.dishdash.R;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
@@ -51,7 +53,9 @@ public class LoginFragment extends Fragment implements ILogin {
         et_login_password = view.findViewById(R.id.et_login_password);
         et_login_email = view.findViewById(R.id.et_login_email);
         tv_login_create_account = (TextView) view.findViewById(R.id.tv_login_create_account);
-        loginPresenter = new LoginPresenter(this, new FirebaseRepository(new FirebaseRemoteDataSource()));
+
+        loginPresenter = new LoginPresenter(this, new FirebaseRepository(new FirebaseRemoteDataSource()),
+                new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(getContext())));
 
         tv_login_create_account.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +89,7 @@ public class LoginFragment extends Fragment implements ILogin {
     @Override
     public void onLoginSuccess() {
         hideProgressBar();
+        loginPresenter.saveUserInfo(loginPresenter.getUserID());
         Toast.makeText(getContext(), "login success", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(getContext(), HomeActivity.class));
         getActivity().finish();

@@ -77,6 +77,9 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxandroid:$rxJavaVersion")
     implementation("io.reactivex.rxjava2:rxjava:$rxJavaVersion")
 
+    implementation("com.f2prateek.rx.preferences2:rx-preferences:2.0.0")
+
+
     //intuit
     implementation("com.intuit.sdp:sdp-android:1.0.6") // scalable size unit
     implementation("com.intuit.ssp:ssp-android:1.0.6")

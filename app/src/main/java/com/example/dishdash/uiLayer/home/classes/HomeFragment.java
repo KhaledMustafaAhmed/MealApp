@@ -24,6 +24,8 @@ import com.bumptech.glide.Glide;
 import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryItem;
@@ -78,23 +80,22 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        cv_random_meal= view.findViewById(R.id.cv_random_meal);
-        iv_random_meal = view.findViewById(R.id.iv_random_meal);
-        tv_random_meal_name = view.findViewById(R.id.tv_random_meal_name);
-        recyclerView = view.findViewById(R.id.rv_popular_meals);
-        rv_categories = (RecyclerView) view.findViewById(R.id.rv_categories);
-        rv_area =(RecyclerView) view.findViewById(R.id.rv_area);
+        initUI(view);
 
-        homePresenter = new HomePresenter(this,MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(getContext())),new FirebaseRepository(new FirebaseRemoteDataSource()));
+        homePresenter = new HomePresenter(this,MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
+                MealsLocalSourceImpl.getInstance(getContext())),
+                new FirebaseRepository(new FirebaseRemoteDataSource()),
+                new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(getContext())));
 
-        popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>());
-        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this);
-        countryAdapter = new CountryAdapter(this,new ArrayList<>());
+        initAdapters();
+
         setRecycleViewForPopular();
         setRecycleViewForCategory();
         setRecycleViewForCountry();
 
-        homePresenter.getRandoMeal();
+        // TODO MUST HANDLE WITH SHARED PREF
+        homePresenter.checkMealOfTheDay();
+
         homePresenter.getMealsBasedOnCategory("Beef");
         homePresenter.getAllCategories("list");
         homePresenter.getAllCountries("list");
@@ -108,13 +109,27 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
             }
         });
 
-        btn_logout = (Button) view.findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 homePresenter.logout();
             }
         });
+    }
+    
+    private void initAdapters(){
+        popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>());
+        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this);
+        countryAdapter = new CountryAdapter(this,new ArrayList<>());
+    }
+    private void initUI(View view){
+        cv_random_meal= view.findViewById(R.id.cv_random_meal);
+        iv_random_meal = view.findViewById(R.id.iv_random_meal);
+        tv_random_meal_name = view.findViewById(R.id.tv_random_meal_name);
+        recyclerView = view.findViewById(R.id.rv_popular_meals);
+        rv_categories = (RecyclerView) view.findViewById(R.id.rv_categories);
+        rv_area =(RecyclerView) view.findViewById(R.id.rv_area);
+        btn_logout = (Button) view.findViewById(R.id.btn_logout);
     }
 
     private void setRecycleViewForPopular(){
@@ -143,11 +158,18 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
     @Override
     public void receiveRandoMeal(MeaList meaList) {
         this.meaList = meaList;
+        homePresenter.saveMealOfDay(meaList.getMeals().get(0).getIdMeal());
         Log.e(TAG, "receiveRandoMeal: " );
         tv_random_meal_name.setText(meaList.getMeals().get(0).getStrMeal());
         Glide.with(requireContext())
                 .load(meaList.getMeals().get(0).getStrMealThumb())
                 .into(iv_random_meal);
+    }
+
+    @Override
+    public void receiveMealByID(MeaList meaList) {
+        Log.d(TAG, "receiveMealByID: ");
+        receiveRandoMeal(meaList);
     }
 
     @Override
@@ -166,6 +188,16 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
     public void receiveAllCountriesItems(List<CountryItem> areaList) {
         Log.d(TAG, "receiveAllCountriesItems: ");
         countryAdapter.setCountryList(areaList);
+    }
+
+    @Override
+    public void receiveMealOfDayNews(boolean flag, String meal_id) {
+        if(!flag){
+            homePresenter.getRandoMeal();
+            homePresenter.saveMealOfDay(meaList.getMeals().get(0).getIdMeal());
+        }else{
+            // TODO get meal by id here
+        }
     }
 
     @Override
