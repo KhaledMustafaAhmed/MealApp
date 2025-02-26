@@ -9,4 +9,8 @@ public interface IMealDetailsView {
 
     public void showInsetFavSuccess();
     public void showInsetFavFailed();
+
+    public void showAddedMealPlanSuccess();
+
+    public void showAddedMealPlanFailed();
 }

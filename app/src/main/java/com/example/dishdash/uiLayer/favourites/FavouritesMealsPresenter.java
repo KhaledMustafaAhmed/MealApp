@@ -64,6 +64,7 @@ public class FavouritesMealsPresenter implements IFavouritesContract{
                     @Override
                     public void onComplete() {
                         Log.d("TAG", "onComplete: in delete presenter");
+                        iFavouritesView.deletionSuccess();
                     }
 
                     @Override

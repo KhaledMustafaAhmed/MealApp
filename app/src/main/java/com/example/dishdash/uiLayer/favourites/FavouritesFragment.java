@@ -1,5 +1,8 @@
 package com.example.dishdash.uiLayer.favourites;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +24,8 @@ import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MealsItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
+import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +72,14 @@ public class FavouritesFragment extends Fragment implements IFavouriteAdapter, I
 
     @Override
     public void onDeleteFavItemClicked(String meal_id) {
+        createDialog(meal_id).show();
+    }
 
+    @Override
+    public void onFavItemClicked(String meal_id) {
+        Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
+        intent.putExtra("MEAL_ID", meal_id);
+        startActivity(intent);
     }
 
 
@@ -78,6 +90,14 @@ public class FavouritesFragment extends Fragment implements IFavouriteAdapter, I
 
     @Override
     public void deletionSuccess() {
+        favouritesMealsPresenter.getFavouritesItems();
+    }
 
+    private AlertDialog createDialog(String meal_id){
+        AlertDialog.Builder builder = new AlertDialog.Builder((getContext()));
+        builder.setMessage("Do you want to delete your meal?");
+        builder.setPositiveButton("Yes", ((dialog, which) -> {favouritesMealsPresenter.deleteFavouriteItem(meal_id);}));
+        builder.setNegativeButton("No Please", ((dialog, which) -> {}));
+        return builder.create();
     }
 }

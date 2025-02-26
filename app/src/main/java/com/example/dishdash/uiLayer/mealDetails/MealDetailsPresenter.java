@@ -3,6 +3,7 @@ package com.example.dishdash.uiLayer.mealDetails;
 import android.util.Log;
 
 import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
+import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MealsItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
@@ -88,5 +89,42 @@ public class MealDetailsPresenter implements MealDetailsContract {
         return firebaseRepository.getUserID();
     }
 
+    @Override
+    public String calcDate(int year, int monthOfYear, int dayOfMonth) {
+        int month = monthOfYear + 1;
+        String strMonth = ""+month;
+        String strDayOfMonth = ""+dayOfMonth;
 
+        if(month < 10){
+            strMonth = "0"+ strMonth;
+        }
+        if(dayOfMonth<10){
+            strDayOfMonth = "0"+ strDayOfMonth;
+        }
+
+        return   year+"-"+ strMonth+ "-"+strDayOfMonth;
+    }
+
+    @Override
+    public void addMealToWeeklyPlan(MealsItem mealsItem, String date) {
+        mealsRepository.addPlannedMeal(new PlannedMeal(firebaseRepository.getUserID(), mealsItem.getIdMeal(), date, mealsItem))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        iMealDetailsView.showAddedMealPlanSuccess();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        iMealDetailsView.showAddedMealPlanFailed();
+                    }
+                });
+    }
 }

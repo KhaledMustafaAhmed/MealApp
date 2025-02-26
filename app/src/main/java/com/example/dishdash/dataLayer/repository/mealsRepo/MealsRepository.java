@@ -86,8 +86,8 @@ public class MealsRepository implements IMealsRepository{
     }
 
     @Override
-    public Completable deletePlannedMeal(String user_id, String meal_id) {
-        return mealsLocalSourceImpl.deletePlannedMeal(user_id,meal_id);
+    public Completable deletePlannedMeal(String user_id, String meal_id, String date) {
+        return mealsLocalSourceImpl.deletePlannedMeal(user_id,meal_id, date);
     }
 
     @Override

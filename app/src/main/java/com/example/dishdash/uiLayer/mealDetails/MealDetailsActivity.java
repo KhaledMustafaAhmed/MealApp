@@ -1,8 +1,11 @@
 package com.example.dishdash.uiLayer.mealDetails;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +29,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MealDetailsActivity extends AppCompatActivity implements IMealDetailsView {
     ImageView iv_favourites_toolbar, iv_meal_details_category, iv_meal_details_area;
@@ -35,6 +39,8 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
     MealDetailsPresenter mealDetailsPresenter;
     DetailedMealAdapter detailedMealAdapter;
     MealsItem meal;
+
+    DatePickerDialog datePickerDialog;
 
     private static final String CATEGORY_PHOTOS_URL = "https://www.themealdb.com/images/category/";
 
@@ -78,7 +84,7 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         fab_calender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openDatePicker();
             }
         });
     }
@@ -112,12 +118,21 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
     @Override
     public void showInsetFavSuccess() {
         Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public void showInsetFavFailed() {
         Toast.makeText(this, "failed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showAddedMealPlanSuccess() {
+        Toast.makeText(this, "Added Successfully!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showAddedMealPlanFailed() {
+        Toast.makeText(this, "Failed when add plan!", Toast.LENGTH_SHORT).show();
     }
 
     private void showAreaPicture(String area){
@@ -154,4 +169,24 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
             case "vietnamese": iv_meal_details_area.setImageResource(R.drawable.vietnamese); break;
         }
     }
+
+    private void openDatePicker(){
+        final Calendar cldr = Calendar.getInstance();
+        int day = cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
+
+        datePickerDialog = new DatePickerDialog(MealDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Log.d("TAG", "onDateSet: ");
+               mealDetailsPresenter.addMealToWeeklyPlan(meal,mealDetailsPresenter.calcDate(year, monthOfYear, dayOfMonth)) ;
+               // Toast.makeText(MealDetailsActivity.this , getDate(year, monthOfYear, dayOfMonth), Toast.LENGTH_SHORT).show();
+            }
+        }, year, month, day);
+        datePickerDialog.setTitle("Select Date");
+        datePickerDialog.getDatePicker().setMinDate(cldr.getTimeInMillis());
+        datePickerDialog.show();
+    }
+
 }

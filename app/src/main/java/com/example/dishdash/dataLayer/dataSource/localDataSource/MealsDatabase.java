@@ -11,7 +11,7 @@ import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
 import com.example.dishdash.dataLayer.model.entities.MealConverter;
 import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
 
-@Database(entities = {FavouriteMeal.class, PlannedMeal.class}, version = 1)
+@Database(entities = {FavouriteMeal.class, PlannedMeal.class}, version = 2)
 @TypeConverters(MealConverter.class)
 public abstract class MealsDatabase extends RoomDatabase {
     public abstract FavouritesDAO FavouritesDAO();

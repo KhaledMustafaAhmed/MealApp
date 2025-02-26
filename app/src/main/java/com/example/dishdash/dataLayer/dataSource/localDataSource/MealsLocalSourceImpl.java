@@ -49,8 +49,8 @@ public class MealsLocalSourceImpl implements IMealsLocalSource {
     }
 
     @Override
-    public Completable deletePlannedMeal(String user_id, String meal_id) {
-        return plannedDAO.deletePlannedMeal(user_id, meal_id);
+    public Completable deletePlannedMeal(String user_id, String meal_id, String date) {
+        return plannedDAO.deletePlannedMeal(user_id, meal_id,  date);
     }
 
     @Override

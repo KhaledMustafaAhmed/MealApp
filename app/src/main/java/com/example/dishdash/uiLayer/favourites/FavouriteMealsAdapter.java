@@ -56,6 +56,13 @@ public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAd
                 iFavouriteAdapter.onDeleteFavItemClicked(favouriteMeals.get(position).getMealsItem().getIdMeal());
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iFavouriteAdapter.onFavItemClicked(favouriteMeals.get(position).getMeal_id());
+            }
+        });
     }
 
     @Override

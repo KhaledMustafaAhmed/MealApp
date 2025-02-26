@@ -17,7 +17,7 @@ public interface IMealsLocalSource {
 
     public Completable addPlannedMeal(PlannedMeal plannedMeal);
 
-    public Completable deletePlannedMeal(String user_id, String meal_id);
+    public Completable deletePlannedMeal(String user_id, String meal_id, String date);
 
     public Single<List<PlannedMeal>> getPlannedMealForUser(String user_id);
 
