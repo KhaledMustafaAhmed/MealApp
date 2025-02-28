@@ -38,4 +38,9 @@
     <string name="web_client_id">823975160432-r6g30in1fnrgveuji0uh6svujqft6oo6.apps.googleusercontent.com</string>
     <string name="or_sign_in_with">Or sign in with</string>
     <string name="continue_as_a_guest">Continue as a Guest</string>
+    <string name="yummy_yummy">YUMMY YUMMY</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="all_ingredients">All Ingredients</string>
+    <string name="all_categories">All Categories</string>
+    <string name="all_countries">All Countries</string>
 </resources>

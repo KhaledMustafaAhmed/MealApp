@@ -13,4 +13,10 @@ public interface IMealDetailsView {
     public void showAddedMealPlanSuccess();
 
     public void showAddedMealPlanFailed();
+
+    public void saveToFavourites(String user_id);
+
+    public void savePlannedMeal(String user_id);
+
+    public void inGuestMode();
 }

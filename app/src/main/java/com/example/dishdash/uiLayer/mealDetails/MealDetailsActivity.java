@@ -1,5 +1,6 @@
 package com.example.dishdash.uiLayer.mealDetails;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
@@ -49,6 +53,7 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_details);
         initUI();
+
         detailedMealAdapter = new DetailedMealAdapter(this, new ArrayList<>());
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -56,7 +61,10 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         rv_ingredient_measure.setAdapter(detailedMealAdapter);
         Intent inComingIntent = getIntent();
         mealDetailsPresenter = new MealDetailsPresenter(this,
-                MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(this)), new FirebaseRepository(new FirebaseRemoteDataSource()));
+                MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(this)),
+                new FirebaseRepository(new FirebaseRemoteDataSource()),
+                new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(this)));
+
         mealDetailsPresenter.getMeal(inComingIntent.getStringExtra("MEAL_ID"));
         setClickListenersForButtons();
     }
@@ -77,14 +85,14 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         fab_favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mealDetailsPresenter.addMealToFavourites(mealDetailsPresenter.getUserID(), meal);
+                mealDetailsPresenter.checkUserMode(1);
             }
         });
 
         fab_calender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDatePicker();
+                mealDetailsPresenter.checkUserMode(2);
             }
         });
     }
@@ -135,6 +143,21 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         Toast.makeText(this, "Failed when add plan!", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void saveToFavourites(String user_id) {
+        mealDetailsPresenter.addMealToFavourites(user_id, meal);
+    }
+
+    @Override
+    public void savePlannedMeal(String user_id) {
+        openDatePicker(user_id);
+    }
+
+    @Override
+    public void inGuestMode() {
+        createDialog().show();
+    }
+
     private void showAreaPicture(String area){
         switch (area){
             case "american": iv_meal_details_area.setImageResource(R.drawable.american); break;
@@ -170,7 +193,7 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         }
     }
 
-    private void openDatePicker(){
+    private void openDatePicker(String user_id){
         final Calendar cldr = Calendar.getInstance();
         int day = cldr.get(Calendar.DAY_OF_MONTH);
         int month = cldr.get(Calendar.MONTH);
@@ -180,13 +203,28 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Log.d("TAG", "onDateSet: ");
-               mealDetailsPresenter.addMealToWeeklyPlan(meal,mealDetailsPresenter.calcDate(year, monthOfYear, dayOfMonth)) ;
-               // Toast.makeText(MealDetailsActivity.this , getDate(year, monthOfYear, dayOfMonth), Toast.LENGTH_SHORT).show();
+               mealDetailsPresenter.addMealToWeeklyPlan(user_id ,meal,mealDetailsPresenter.calcDate(year, monthOfYear, dayOfMonth)) ;
             }
         }, year, month, day);
+
         datePickerDialog.setTitle("Select Date");
         datePickerDialog.getDatePicker().setMinDate(cldr.getTimeInMillis());
         datePickerDialog.show();
+    }
+
+    private AlertDialog createDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You do not have account to logout, do you want to create account?");
+        builder.setPositiveButton("Yes", ((dialog, which) -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+        }));
+
+        builder.setNegativeButton("No", ((dialog, which) -> {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+        }));
+        return  builder.create();
     }
 
 }

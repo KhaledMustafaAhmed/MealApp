@@ -16,8 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
@@ -31,9 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavouritesFragment extends Fragment implements IFavouriteAdapter, IFavouritesView{
-    FavouriteMealsAdapter favouriteMealsAdapter;
-    RecyclerView rv_favourites_fragment;
-    FavouritesMealsPresenter favouritesMealsPresenter;
+    private FavouriteMealsAdapter favouriteMealsAdapter;
+    private RecyclerView rv_favourites_fragment;
+    private FavouritesMealsPresenter favouritesMealsPresenter;
+    private LottieAnimationView lottie_fav;
 
     public FavouritesFragment() {
         // Required empty public constructor
@@ -54,14 +58,16 @@ public class FavouritesFragment extends Fragment implements IFavouriteAdapter, I
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         favouritesMealsPresenter = new FavouritesMealsPresenter(this,MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
                 MealsLocalSourceImpl.getInstance(requireContext())),
-                new FirebaseRepository(new FirebaseRemoteDataSource()));
-
+                new FirebaseRepository(new FirebaseRemoteDataSource()), new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(requireContext())));
+        lottie_fav = view.findViewById(R.id.lottie_fav);
         rv_favourites_fragment = view.findViewById(R.id.rv_favourites_fragment);
         favouriteMealsAdapter = new FavouriteMealsAdapter(new ArrayList<>(), requireContext(), this);
         setUpRecycleView();
-        favouritesMealsPresenter.getFavouritesItems();
+
+        favouritesMealsPresenter.checkUserMode();
     }
     private void setUpRecycleView(){
 
@@ -90,6 +96,18 @@ public class FavouritesFragment extends Fragment implements IFavouriteAdapter, I
 
     @Override
     public void deletionSuccess() {
+        favouritesMealsPresenter.getFavouritesItems();
+    }
+
+    @Override
+    public void showAnimation() {
+        lottie_fav.setVisibility(View.VISIBLE);
+        lottie_fav.playAnimation();
+    }
+
+    @Override
+    public void getUserData() {
+        lottie_fav.setVisibility(View.GONE);
         favouritesMealsPresenter.getFavouritesItems();
     }
 

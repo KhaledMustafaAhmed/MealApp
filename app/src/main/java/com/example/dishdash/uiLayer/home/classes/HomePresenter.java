@@ -2,6 +2,7 @@ package com.example.dishdash.uiLayer.home.classes;
 
 import static io.reactivex.Single.zip;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.util.Pair;
 
@@ -134,29 +135,22 @@ public class HomePresenter implements HomeContract {
     @Override
     public void logout() {
         firebaseRepository.logout();
-        sharedPrefManager.setUserId("");
+        sharedPrefManager.setUserId("GUEST");
         iHomeView.doLogout();
     }
 
     @Override
     public void checkMealOfTheDay() {
-        Observable<String> dateFromPref = sharedPrefManager.getDATE_ID().asObservable();
-        Observable<String> mealFromPref = sharedPrefManager.getMEAL_ID().asObservable();
+        String mealId = sharedPrefManager.getMealId();
+        String dateId = sharedPrefManager.getDate();
 
-        Observable.zip(mealFromPref, dateFromPref, (MEAL_ID, DATE_Id) -> {
-            return new Pair<>(MEAL_ID, DATE_Id);
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(pair -> {
-            if(pair.second != null &&  pair.second.equals(getCurrentDate())){
-                // هنا لو التواريخ متساوية معناها اننا ف نفس اليوم ف اجيب نفس ال meal
-                // TODO get meal by id (pair.first meal_id)
-                getMealByID(pair.first);
-                Log.d(TAG, "checkMealOfTheDay: yes ");
-            }else{
-                //TODO get random meal
-                Log.d(TAG, "checkMealOfTheDay: no");
-                getRandoMeal();
-            }
-        });
+        if (dateId != null && dateId.equals(getCurrentDate())) {
+            getMealByID(mealId);
+            Log.d(TAG, "checkMealOfTheDay: yes");
+        } else {
+            Log.d(TAG, "checkMealOfTheDay: no");
+            getRandoMeal();
+        }
     }
 
     @Override
@@ -164,6 +158,11 @@ public class HomePresenter implements HomeContract {
         sharedPrefManager.setMealId(meal_id);
         sharedPrefManager.setDate(getCurrentDate());
         Log.d(TAG, "saveMealOfDay: ");
+    }
+
+    @Override
+    public String checkUserMode() {
+        return sharedPrefManager.getUserId();
     }
 
     private String getCurrentDate(){

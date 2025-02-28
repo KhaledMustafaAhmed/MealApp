@@ -30,6 +30,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularV
         this.context = context;
         this.popularList = popularList;
         this.iPopular = iPopular;
+        notifyDataSetChanged();
     }
 
     public void setPopularList( List<PopularItem> popularList) {

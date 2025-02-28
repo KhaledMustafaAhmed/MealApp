@@ -2,6 +2,7 @@ package com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDa
 
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryList;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryList;
+import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.IngredientList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 
@@ -21,5 +22,8 @@ public interface MealsRemoteDataSource {
     public Single<CategoryList> getAllCategories(String categoryCode);
 
     public Single<CountryList> getAllCountries(String countryCode);
+
+    public Single<IngredientList> getAllIngredients(String ingredientCode);
+
 
 }

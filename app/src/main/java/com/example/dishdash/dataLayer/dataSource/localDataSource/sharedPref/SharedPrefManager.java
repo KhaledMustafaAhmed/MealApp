@@ -1,35 +1,44 @@
 package com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref;
 
-import com.f2prateek.rx.preferences2.Preference;
+import android.util.Log;
 
 public class SharedPrefManager {
     private final SharedPreferenceLocalDataSource sharedPreferenceLocalDataSource;
-    public SharedPrefManager(SharedPreferenceLocalDataSource sharedPreferenceLocalDataSource){
+
+    public SharedPrefManager(SharedPreferenceLocalDataSource sharedPreferenceLocalDataSource) {
         this.sharedPreferenceLocalDataSource = sharedPreferenceLocalDataSource;
     }
 
-    public void setUserId(String userId){
+    public void setUserId(String userId) {
+        Log.d("TAG", "setUserId: in shared manager " + userId);
         sharedPreferenceLocalDataSource.setUserId(userId);
     }
 
-    public void setMealId(String mealId){
+    public void setMealId(String mealId) {
         sharedPreferenceLocalDataSource.setMealId(mealId);
     }
 
-    public void setDate(String date){
+    public void setDate(String date) {
         sharedPreferenceLocalDataSource.setDate(date);
     }
 
-    public Preference<String> getUser_ID(){
-        return sharedPreferenceLocalDataSource.getUser_ID();
+    public String getUserId() {
+        return sharedPreferenceLocalDataSource.getUserId();
     }
 
-    public Preference<String> getMEAL_ID(){
-        return sharedPreferenceLocalDataSource.getMEAL_ID();
+    public String getMealId() {
+        return sharedPreferenceLocalDataSource.getMealId();
     }
 
-    public Preference<String> getDATE_ID(){
-        return sharedPreferenceLocalDataSource.getDATE_ID();
+    public String getDate() {
+        return sharedPreferenceLocalDataSource.getDate();
     }
 
+    public void setLoggedIn(boolean loggedIn) {
+        sharedPreferenceLocalDataSource.setLoggedIn(loggedIn);
+    }
+
+    public boolean isLoggedIn() {
+        return sharedPreferenceLocalDataSource.isLoggedIn();
+    }
 }

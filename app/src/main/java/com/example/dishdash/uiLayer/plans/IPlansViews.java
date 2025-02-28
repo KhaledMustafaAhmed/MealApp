@@ -8,4 +8,8 @@ public interface IPlansViews {
     public void showPlannedDeleted();
 
     public void receiveAllPlannedMeals(List<PlannedMeal> plannedMeals);
+
+    public void showAnimation();
+
+    public void getUserData();
 }

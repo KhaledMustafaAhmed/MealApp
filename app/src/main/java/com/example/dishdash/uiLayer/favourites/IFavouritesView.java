@@ -9,4 +9,8 @@ public interface IFavouritesView {
     public void receiveFavouritesItem(List<FavouriteMeal> favouriteMeals) ;
 
     public void deletionSuccess();
+
+    public void showAnimation();
+
+    public void getUserData();
 }

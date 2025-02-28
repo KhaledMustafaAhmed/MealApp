@@ -88,7 +88,8 @@
             android:layout_marginTop="12dp"/>
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_guest_option"
-            android:layout_width="@dimen/_150sdp"
+            android:layout_width="@dimen/_140sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_height="@dimen/_35sdp"
             android:text="@string/continue_as_a_guest"
             android:layout_gravity="center"
@@ -104,8 +105,8 @@
             android:textStyle= "bold"/>
         <ImageView
             android:id="@+id/iv_login_with_google"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             android:src="@drawable/google"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_gravity="center"/>

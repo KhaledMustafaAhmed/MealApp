@@ -2,6 +2,7 @@ package com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDa
 
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryList;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryList;
+import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.IngredientList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 
@@ -29,4 +30,8 @@ public interface APIService {
 
     @GET("list.php")
     public Single<CountryList> getAllCountries(@Query("a") String countryCode);
+
+    @GET("list.php")
+    public Single<IngredientList> getAllIngredients(@Query("i") String ingredientCode);
+
 }

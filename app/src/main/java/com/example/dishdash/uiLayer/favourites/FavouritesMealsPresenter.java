@@ -2,6 +2,7 @@ package com.example.dishdash.uiLayer.favourites;
 
 import android.util.Log;
 
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
 import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
@@ -17,14 +18,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FavouritesMealsPresenter implements IFavouritesContract{
 
-    MealsRepository mealsRepository;
-    FirebaseRepository firebaseRepository;
-    IFavouritesView iFavouritesView;
+    private MealsRepository mealsRepository;
+    private FirebaseRepository firebaseRepository;
+    private IFavouritesView iFavouritesView;
 
-    public FavouritesMealsPresenter(IFavouritesView iFavouritesView,MealsRepository mealsRepository, FirebaseRepository firebaseRepository){
+    private SharedPrefManager sharedPrefManager;
+    public FavouritesMealsPresenter(IFavouritesView iFavouritesView,MealsRepository mealsRepository, FirebaseRepository firebaseRepository, SharedPrefManager sharedPrefManager){
         this.mealsRepository = mealsRepository;
         this.firebaseRepository = firebaseRepository;
         this.iFavouritesView = iFavouritesView;
+        this.sharedPrefManager = sharedPrefManager;
     }
     @Override
     public void getFavouritesItems() {
@@ -73,4 +76,16 @@ public class FavouritesMealsPresenter implements IFavouritesContract{
                     }
                 });
     }
+
+    @Override
+    public void checkUserMode() {
+        String mode = sharedPrefManager.getUserId();
+        if(mode.equals("GUEST")){
+            iFavouritesView.showAnimation();
+        }else{
+            iFavouritesView.getUserData();
+        }
+    }
+
+
 }

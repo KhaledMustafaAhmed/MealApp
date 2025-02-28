@@ -28,10 +28,9 @@ public class SignupFragment extends Fragment implements ISignup {
     private ProgressBar progressBar;
     private TextView loginButton;
     private SignupPresenter signupPresenter;
+    private View view;
 
-private View view;
     public SignupFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -49,7 +48,9 @@ private View view;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeUIComponent(view);
+
         signupPresenter = new SignupPresenter(this,new FirebaseRepository(new FirebaseRemoteDataSource()));
+
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,20 +63,19 @@ private View view;
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO navigate to login fragment in nav graph
-                Navigation.findNavController(v).navigate(R.id.action_signupFragment_to_loginFragment);
+                 Navigation.findNavController(v).navigate(R.id.action_signupFragment2_to_loginFragment);
             }
         });
 
     }
     private void initializeUIComponent(View view){
+        this.view = view;
         emailEdit = (EditText) view.findViewById(R.id.et_signup_email);
         passwordEdit = (EditText) view.findViewById(R.id.et_signup_password);
         confirmPasswordEdit = (EditText) view.findViewById(R.id.et_signup_confirm_password);
         createAccountButton = (Button) view.findViewById(R.id.btn_signup_create_account);
         progressBar = (ProgressBar) view.findViewById(R.id.pb_signup);
         loginButton = (TextView) view.findViewById(R.id.tv_signup_loginbtn);
-        this.view = view;
     }
 
     @Override
@@ -92,15 +92,13 @@ private View view;
 
     @Override
     public void onSignupSuccess() {
-        //TODO shows snackbar and navigate to login fragment
         Toast.makeText(getContext(), "Create Account is Done! Check your mail to verify!", Toast.LENGTH_SHORT).show();
-        Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment);
+        Navigation.findNavController(view).navigate(R.id.action_signupFragment2_to_loginFragment);
     }
 
     @Override
     public void onSignupFail(String errorMessage) {
         hideProgressBar();
-        // TODO snackbar shows the message
         Toast.makeText(getContext(),errorMessage, Toast.LENGTH_SHORT).show();
     }
 

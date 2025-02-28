@@ -1,5 +1,6 @@
 package com.example.dishdash.uiLayer.home.classes;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -48,52 +49,54 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements IHomeView, ICategory, ICountry, IPopular {
     private static final String TAG = "HomeFragment";
-    Button btn_logout;
-    CardView cv_random_meal;
-    ImageView iv_random_meal;
-    TextView tv_random_meal_name;
-    HomePresenter homePresenter;
-    PopularAdapter popularAdapter;
-    RecyclerView recyclerView, rv_categories, rv_area;
-    MeaList meaList;
-    CategoryAdapter categoryAdapter;
-    CountryAdapter countryAdapter;
-
+    private Button btn_logout;
+    private CardView cv_random_meal;
+    private ImageView iv_random_meal;
+    private TextView tv_random_meal_name;
+    private HomePresenter homePresenter;
+    private PopularAdapter popularAdapter;
+    private CategoryAdapter categoryAdapter;
+    private CountryAdapter countryAdapter;
+    private RecyclerView rv_popular_meals, rv_categories, rv_area;
+    private MeaList meaList;
 
     public HomeFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         initUI(view);
 
-        homePresenter = new HomePresenter(this,MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
-                MealsLocalSourceImpl.getInstance(getContext())),
-                new FirebaseRepository(new FirebaseRemoteDataSource()),
-                new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(getContext())));
 
         initAdapters();
 
         setRecycleViewForPopular();
+
         setRecycleViewForCategory();
+
         setRecycleViewForCountry();
 
-        // TODO MUST HANDLE WITH SHARED PREF
+        homePresenter = new HomePresenter(this,MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
+                                             MealsLocalSourceImpl.getInstance(requireContext())),
+                                            new FirebaseRepository(new FirebaseRemoteDataSource()),
+                                            new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(requireContext())));
+
+        String user =  homePresenter.checkUserMode();
+        if(user.equals("GUEST")){
+            btn_logout.setText("Login");
+        }
         homePresenter.checkMealOfTheDay();
 
         homePresenter.getMealsBasedOnCategory("Beef");
@@ -112,32 +115,33 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homePresenter.logout();
+               String user =  homePresenter.checkUserMode();
+                logoutCheckUserResponse(user);
             }
         });
     }
-    
-    private void initAdapters(){
-        popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>());
-        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this);
-        countryAdapter = new CountryAdapter(this,new ArrayList<>());
-    }
+
     private void initUI(View view){
         cv_random_meal= view.findViewById(R.id.cv_random_meal);
         iv_random_meal = view.findViewById(R.id.iv_random_meal);
         tv_random_meal_name = view.findViewById(R.id.tv_random_meal_name);
-        recyclerView = view.findViewById(R.id.rv_popular_meals);
+        rv_popular_meals = view.findViewById(R.id.rv_popular_meals);
         rv_categories = (RecyclerView) view.findViewById(R.id.rv_categories);
         rv_area =(RecyclerView) view.findViewById(R.id.rv_area);
         btn_logout = (Button) view.findViewById(R.id.btn_logout);
     }
 
+    private void initAdapters(){
+        popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>());
+        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this);
+        countryAdapter = new CountryAdapter(this,new ArrayList<>());
+    }
+
     private void setRecycleViewForPopular(){
         LinearLayoutManager linearLayoutManagerOne = new LinearLayoutManager(getContext());
         linearLayoutManagerOne.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManagerOne);
-        recyclerView.setAdapter(popularAdapter);
-        popularAdapter.notifyDataSetChanged();
+        rv_popular_meals.setLayoutManager(linearLayoutManagerOne);
+        rv_popular_meals.setAdapter(popularAdapter);
     }
 
     private void setRecycleViewForCategory(){
@@ -145,7 +149,6 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
         linearLayoutManagerTwo.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv_categories.setLayoutManager(linearLayoutManagerTwo);
         rv_categories.setAdapter(categoryAdapter);
-       // categoryAdapter.notifyDataSetChanged();
     }
 
     private void setRecycleViewForCountry(){
@@ -158,8 +161,10 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
     @Override
     public void receiveRandoMeal(MeaList meaList) {
         this.meaList = meaList;
-        homePresenter.saveMealOfDay(meaList.getMeals().get(0).getIdMeal());
         Log.e(TAG, "receiveRandoMeal: " );
+
+        homePresenter.saveMealOfDay(meaList.getMeals().get(0).getIdMeal());
+
         tv_random_meal_name.setText(meaList.getMeals().get(0).getStrMeal());
         Glide.with(requireContext())
                 .load(meaList.getMeals().get(0).getStrMealThumb())
@@ -202,10 +207,23 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
 
     @Override
     public void doLogout() {
-        //TODO NAVIGATE TO LOGIN SCREEN
-        Toast.makeText(getContext(),"Logout Success!",Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        getActivity().finish();
+        createDialog("Do you want to logout?").show();
+    }
+
+    @Override
+    public void guestLogout() {
+        createDialog("You do not have account to logout, do you want to create account?").show();
+    }
+
+    @Override
+    public void logoutCheckUserResponse(String user) {
+        if(user.equals("GUEST")){
+            Log.d(TAG, "logoutCheckUserResponse: "+ user);
+            startActivity(new Intent(getActivity(), MainActivity.class));
+        }else{
+            Log.d(TAG, "logoutCheckUserResponse: "+ user);
+            homePresenter.logout();
+        }
     }
 
     @Override
@@ -225,5 +243,20 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
         Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
         intent.putExtra("MEAL_ID", mealID);
         startActivity(intent);
+    }
+
+    private AlertDialog createDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(message);
+        builder.setPositiveButton("Yes", ((dialog, which) -> {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }));
+
+        builder.setNegativeButton("No", ((dialog, which) -> {
+            Toast.makeText(getContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+        }));
+        return  builder.create();
     }
 }

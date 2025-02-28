@@ -3,54 +3,54 @@ package com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import com.f2prateek.rx.preferences2.Preference;
-import com.f2prateek.rx.preferences2.RxSharedPreferences;
+import android.util.Log;
 
 public class SharedPreferenceLocalDataSource {
-    private RxSharedPreferences rxSharedPreferences;
-    private Preference<String> USER_ID;
-    private Preference<String> MEAL_ID;
-    private Preference<String> DATE_ID;
+    private SharedPreferences sharedPreferences;
 
     private static SharedPreferenceLocalDataSource instance = null;
+
     private SharedPreferenceLocalDataSource(Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        rxSharedPreferences = RxSharedPreferences.create(sharedPreferences);
-        USER_ID = rxSharedPreferences.getString("USER_ID");
-        MEAL_ID = rxSharedPreferences.getString("MEAL_ID");
-        DATE_ID = rxSharedPreferences.getString("DATE_ID");
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public static SharedPreferenceLocalDataSource getInstance(Context context) {
-        if(instance == null){
+        if (instance == null) {
             instance = new SharedPreferenceLocalDataSource(context);
         }
         return instance;
     }
 
-    public void setUserId(String userId){
-        USER_ID.set(userId);
+    public void setUserId(String userId) {
+        Log.d("TAG", "setUserId: in shared local impl " + userId);
+        sharedPreferences.edit().putString("USER_ID", userId).apply();
     }
 
-    public void setMealId(String mealId){
-        MEAL_ID.set(mealId);
+    public void setMealId(String mealId) {
+        sharedPreferences.edit().putString("MEAL_ID", mealId).apply();
     }
 
-    public void setDate(String date){
-        DATE_ID.set(date);
+    public void setDate(String date) {
+        sharedPreferences.edit().putString("DATE_ID", date).apply();
     }
 
-    public Preference<String> getUser_ID(){
-        return USER_ID;
+    public String getUserId() {
+        return sharedPreferences.getString("USER_ID", null);
     }
 
-    public Preference<String> getMEAL_ID(){
-        return MEAL_ID;
+    public String getMealId() {
+        return sharedPreferences.getString("MEAL_ID", null);
     }
 
-    public Preference<String> getDATE_ID(){
-        return DATE_ID;
+    public String getDate() {
+        return sharedPreferences.getString("DATE_ID", null);
     }
 
+    public void setLoggedIn(boolean loggedIn) {
+        sharedPreferences.edit().putBoolean("IS_LOGGED_IN", loggedIn).apply();
+    }
+
+    public boolean isLoggedIn() {
+        return sharedPreferences.getBoolean("IS_LOGGED_IN", false);
+    }
 }

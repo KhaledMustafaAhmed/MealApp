@@ -15,8 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
@@ -31,6 +34,7 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
     private RecyclerView rv_weekly_plan_meals;
     private PlansAdapter plansAdapter;
     private PlansPresenter plansPresenter;
+    private LottieAnimationView lottie_plans;
 
     public PlansFragment() {
         // Required empty public constructor
@@ -53,20 +57,22 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         plansPresenter = new PlansPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
                 MealsLocalSourceImpl.getInstance(requireContext())),
                 new FirebaseRepository(new FirebaseRemoteDataSource()),
-                this);
+                this, new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(requireContext())));
 
         plansAdapter = new PlansAdapter(requireContext(), this, new ArrayList<>());
 
+        lottie_plans = view.findViewById(R.id.lottie_plans);
         rv_weekly_plan_meals = (RecyclerView) view.findViewById(R.id.rv_weekly_plan_meals);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_weekly_plan_meals.setLayoutManager(linearLayoutManager);
         rv_weekly_plan_meals.setAdapter(plansAdapter);
 
-        plansPresenter.getAllPlannedMealsForUser();
+        plansPresenter.checkUserMode();
     }
 
     @Override
@@ -92,6 +98,17 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
         plansAdapter.setPlannedMeals(plannedMeals);
     }
 
+    @Override
+    public void showAnimation() {
+        lottie_plans.setVisibility(View.VISIBLE);
+        lottie_plans.playAnimation();
+    }
+
+    @Override
+    public void getUserData() {
+        lottie_plans.setVisibility(View.GONE);
+        plansPresenter.getAllPlannedMealsForUser();
+    }
 
     private AlertDialog createDialog(String meal_id, String date){
         AlertDialog.Builder builder = new AlertDialog.Builder((getContext()));

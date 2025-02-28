@@ -27,44 +27,42 @@ import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 
 public class LoginFragment extends Fragment implements ILogin {
-    LoginPresenter loginPresenter;
-    EditText et_login_password, et_login_email;
-    TextView tv_login_create_account ;
-    Button btn_login;
-    ProgressBar login_progress_bar;
+    private LoginPresenter loginPresenter;
+    private EditText et_login_password, et_login_email;
+    private TextView tv_login_create_account ;
+    private Button btn_login, btn_guest_option;
+    private ProgressBar login_progress_bar;
 
     public LoginFragment() {
-        // Required empty public constructor
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        login_progress_bar = view.findViewById(R.id.login_progress_bar);
-        et_login_password = view.findViewById(R.id.et_login_password);
-        et_login_email = view.findViewById(R.id.et_login_email);
-        tv_login_create_account = (TextView) view.findViewById(R.id.tv_login_create_account);
+
+        initUI(view);
 
         loginPresenter = new LoginPresenter(this, new FirebaseRepository(new FirebaseRemoteDataSource()),
-                new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(getContext())));
+                new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(requireContext())));
 
         tv_login_create_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* Navigate to signup page */
-                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signupFragment);
+                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signupFragment2);
             }
         });
-        btn_login = view.findViewById(R.id.btn_login);
+
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,8 +70,26 @@ public class LoginFragment extends Fragment implements ILogin {
                 loginPresenter.validateData(new Pair<>(et_login_email.getText().toString(), et_login_password.getText().toString()));
             }
         });
+
+        btn_guest_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               loginPresenter.continueAsGuest();
+               Intent intent = new Intent(getActivity(), HomeActivity.class);
+               startActivity(intent);
+               getActivity().finish();
+            }
+        });
     }
 
+    private void initUI(View view){
+        login_progress_bar = view.findViewById(R.id.login_progress_bar);
+        et_login_password = view.findViewById(R.id.et_login_password);
+        et_login_email = view.findViewById(R.id.et_login_email);
+        tv_login_create_account = (TextView) view.findViewById(R.id.tv_login_create_account);
+        btn_login = view.findViewById(R.id.btn_login);
+        btn_guest_option = view.findViewById(R.id.btn_guest_option);
+    }
     @Override
     public void showProgressBar() {
         login_progress_bar.setVisibility(View.VISIBLE);
@@ -89,21 +105,23 @@ public class LoginFragment extends Fragment implements ILogin {
     @Override
     public void onLoginSuccess() {
         hideProgressBar();
-        loginPresenter.saveUserInfo(loginPresenter.getUserID());
-        Toast.makeText(getContext(), "login success", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(getContext(), HomeActivity.class));
+        Toast.makeText(requireContext(), "login success", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), HomeActivity.class);
+        startActivity(intent);
         getActivity().finish();
     }
 
     @Override
     public void onLoginFail(String errorMessage) {
         hideProgressBar();
-        Toast.makeText(getContext(), "login failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "login failed check network", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void onValidateSuccess(User user) {
         loginPresenter.doLoginWithFirebase(user);
     }
+
     @Override
     public void onValidateFail(int message) {
         hideProgressBar();

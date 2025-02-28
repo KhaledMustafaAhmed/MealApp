@@ -6,6 +6,7 @@ import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDat
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.interfaces.MealsRemoteDataSource;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryList;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryList;
+import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.IngredientList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 
@@ -68,6 +69,11 @@ public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
     @Override
     public Single<CountryList> getAllCountries(String countryCode) {
         return apiService.getAllCountries(countryCode);
+    }
+
+    @Override
+    public Single<IngredientList> getAllIngredients(String ingredientCode) {
+        return apiService.getAllIngredients(ingredientCode);
     }
 
 }

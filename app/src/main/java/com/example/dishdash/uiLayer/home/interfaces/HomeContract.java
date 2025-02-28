@@ -16,4 +16,6 @@ public interface HomeContract {
     public void checkMealOfTheDay();
 
     public void saveMealOfDay(String meal_id);
+
+    public String checkUserMode();
 }

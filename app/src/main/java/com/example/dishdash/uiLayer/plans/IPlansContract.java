@@ -4,4 +4,6 @@ public interface IPlansContract {
     public void gelPlannedMeal(String meal_id, String date);
 
     public void getAllPlannedMealsForUser();
+
+    public void checkUserMode();
 }

@@ -4,6 +4,7 @@ import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
 import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryList;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryList;
+import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.IngredientList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import retrofit2.http.Query;
 
 public interface IMealsRepository {
     public Single<MeaList> getRandoMeal();
@@ -39,4 +41,7 @@ public interface IMealsRepository {
     public Completable deletePlannedMeal(String user_id, String meal_id, String date);
 
     public Single<List<PlannedMeal>> getPlannedMealForUser(String user_id);
+
+    public Single<IngredientList> getAllIngredients(String ingredientCode);
+
 }

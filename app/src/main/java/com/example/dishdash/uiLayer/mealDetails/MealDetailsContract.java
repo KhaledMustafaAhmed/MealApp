@@ -14,5 +14,7 @@ public interface MealDetailsContract {
 
     public String calcDate(int year, int monthOfYear, int dayOfMonth);
 
-    public void addMealToWeeklyPlan(MealsItem mealsItem, String date);
+    public void addMealToWeeklyPlan(String user_id , MealsItem mealsItem, String date);
+
+    public void checkUserMode(int message);
 }

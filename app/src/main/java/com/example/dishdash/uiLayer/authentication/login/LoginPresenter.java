@@ -1,5 +1,6 @@
 package com.example.dishdash.uiLayer.authentication.login;
 
+import android.util.Log;
 import android.util.Pair;
 import android.util.Patterns;
 
@@ -10,9 +11,9 @@ import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPresenter implements LoginContract, FirebaseCallback {
-    ILogin iLogin;
-    FirebaseRepository firebaseRepository;
-    SharedPrefManager sharedPrefManager;
+    private final ILogin iLogin;
+    private final FirebaseRepository firebaseRepository;
+    private final SharedPrefManager sharedPrefManager;
 
     public LoginPresenter(ILogin iLogin, FirebaseRepository firebaseRepository, SharedPrefManager sharedPrefManager) {
         this.iLogin = iLogin;
@@ -40,17 +41,14 @@ public class LoginPresenter implements LoginContract, FirebaseCallback {
     }
 
     @Override
-    public void saveUserInfo(String user_Id) {
-        sharedPrefManager.setUserId(user_Id);
-    }
-
-    @Override
-    public String getUserID() {
-        return firebaseRepository.getUserID();
+    public void continueAsGuest() {
+        sharedPrefManager.setUserId("GUEST");
     }
 
     @Override
     public void onSuccess(FirebaseUser user) {
+        sharedPrefManager.setUserId(user.getUid());
+        Log.d("TAG", "onSuccess: firebase  "+user.getUid());
         iLogin.onLoginSuccess();
     }
 

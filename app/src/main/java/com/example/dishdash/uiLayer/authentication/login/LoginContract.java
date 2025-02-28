@@ -10,9 +10,7 @@ public interface LoginContract {
     public void validateData(Pair<String, String> userInfo);
     public void doLoginWithFirebase(User user);
 
-    public void saveUserInfo(String user_Id);
-
-    public String getUserID();
+    public void continueAsGuest();
 
     //TODO Add function doLoginWithGoogle
 }

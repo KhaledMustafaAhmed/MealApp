@@ -49,6 +49,5 @@ public class SignupPresenter implements  SignupContract, FirebaseCallback{
     @Override
     public void onFailure(String errorMessage) {
         iSignup.onSignupFail(errorMessage);
-
     }
 }

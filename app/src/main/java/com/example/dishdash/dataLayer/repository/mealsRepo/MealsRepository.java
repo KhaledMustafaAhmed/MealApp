@@ -8,6 +8,7 @@ import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
 import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryList;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryList;
+import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.IngredientList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 
@@ -93,6 +94,11 @@ public class MealsRepository implements IMealsRepository{
     @Override
     public Single<List<PlannedMeal>> getPlannedMealForUser(String user_id) {
         return mealsLocalSourceImpl.getPlannedMealForUser(user_id);
+    }
+
+    @Override
+    public Single<IngredientList> getAllIngredients(String ingredientCode) {
+        return mealsRemoteSourceImpl.getAllIngredients(ingredientCode);
     }
 
 

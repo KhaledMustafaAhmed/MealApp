@@ -1,5 +1,6 @@
 package com.example.dishdash.uiLayer.plans;
 
+import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
 import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
@@ -19,11 +20,13 @@ public class PlansPresenter implements IPlansContract{
     private MealsRepository mealsRepository;
     private FirebaseRepository firebaseRepository;
     private IPlansViews iPlansViews;
+    private SharedPrefManager sharedPrefManager;
 
-    public PlansPresenter(MealsRepository mealsRepository, FirebaseRepository firebaseRepository, IPlansViews iPlansViews) {
+    public PlansPresenter(MealsRepository mealsRepository, FirebaseRepository firebaseRepository, IPlansViews iPlansViews, SharedPrefManager sharedPrefManager) {
         this.mealsRepository = mealsRepository;
         this.firebaseRepository = firebaseRepository;
         this.iPlansViews = iPlansViews;
+        this.sharedPrefManager =sharedPrefManager;
     }
 
     @Override
@@ -70,5 +73,15 @@ public class PlansPresenter implements IPlansContract{
 
                     }
                 });
+    }
+
+    @Override
+    public void checkUserMode() {
+        String mode =  sharedPrefManager.getUserId();
+        if(mode.equals("GUEST")){
+            iPlansViews.showAnimation();
+        }else{
+            iPlansViews.getUserData();
+        }
     }
 }

@@ -87,6 +87,7 @@ public class FirebaseRemoteDataSource implements IAuthFirebase {
                 });
     }
 
+    //TODO need to change
     public void addPlannedMeal(String userId, PlannedMeal plannedMeal) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
