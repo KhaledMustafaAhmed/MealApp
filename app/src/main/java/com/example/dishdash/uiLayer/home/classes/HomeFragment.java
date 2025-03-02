@@ -28,9 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.bumptech.glide.Glide;
-import com.example.dishdash.Connection;
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.Connection;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
@@ -52,6 +51,8 @@ import com.example.dishdash.uiLayer.home.interfaces.IPopular;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
 import com.example.dishdash.uiLayer.home.adapters.PopularAdapter;
 import com.example.dishdash.uiLayer.home.interfaces.IHomeView;
+import com.example.dishdash.uiLayer.helper.GlideImageLoader;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
     private MeaList meaList;
     private ConstraintLayout cl_whole_home;
     private LottieAnimationView lottie_home_lost_connection;
-
+    private ImageLoader imageLoader;
     private Connection connection;
 
     public HomeFragment() {
@@ -91,9 +92,8 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        connection = new Connection(requireContext(),this);
-        cl_whole_home = view.findViewById(R.id.cl_whole_home);
         initUI(view);
+
         initAdapters();
 
         setRecycleViewForPopular();
@@ -107,16 +107,20 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
                                             new FirebaseRepository(new FirebaseRemoteDataSource()),
                                             new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(requireContext())));
 
+        imageLoader = new GlideImageLoader(requireContext());
+
+        connection = new Connection(requireContext(),this);
+
         String user =  homePresenter.checkUserMode();
         if(user.equals("GUEST")){
             btn_logout.setText("Login");
         }
 
-
         /* Check network state */
         if(!connection.isNetworkAvailable()) {
             onConnectionUnAvailable();
         }
+
         connection.register();
 
         cv_random_meal.setOnClickListener(new View.OnClickListener() {
@@ -146,11 +150,12 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
         rv_area =(RecyclerView) view.findViewById(R.id.rv_area);
         btn_logout = (Button) view.findViewById(R.id.btn_logout);
         lottie_home_lost_connection = (LottieAnimationView) view.findViewById(R.id.lottie_home_lost_connection);
+        cl_whole_home = view.findViewById(R.id.cl_whole_home);
     }
 
     private void initAdapters(){
-        popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>());
-        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this);
+        popularAdapter = new PopularAdapter(requireContext(),this, new ArrayList<>(), new GlideImageLoader(requireContext()));
+        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(), this, new GlideImageLoader(requireContext()));
         countryAdapter = new CountryAdapter(this,new ArrayList<>());
     }
 
@@ -183,9 +188,8 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
         homePresenter.saveMealOfDay(meaList.getMeals().get(0).getIdMeal());
 
         tv_random_meal_name.setText(meaList.getMeals().get(0).getStrMeal());
-        Glide.with(requireContext())
-                .load(meaList.getMeals().get(0).getStrMealThumb())
-                .into(iv_random_meal);
+
+        imageLoader.loadImage(meaList.getMeals().get(0).getStrMealThumb(), iv_random_meal);
     }
 
     @Override
@@ -214,23 +218,8 @@ public class HomeFragment extends Fragment implements IHomeView, ICategory, ICou
     }
 
     @Override
-    public void receiveMealOfDayNews(boolean flag, String meal_id) {
-        if(!flag){
-            homePresenter.getRandoMeal();
-            homePresenter.saveMealOfDay(meaList.getMeals().get(0).getIdMeal());
-        }else{
-            // TODO get meal by id here
-        }
-    }
-
-    @Override
     public void doLogout() {
         createDialog("Do you want to logout?").show();
-    }
-
-    @Override
-    public void guestLogout() {
-        createDialog("You do not have account to logout, do you want to create account?").show();
     }
 
     @Override

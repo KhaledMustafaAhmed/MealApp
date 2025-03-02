@@ -15,7 +15,6 @@ import io.reactivex.Single;
 
 @Dao
 public interface PlannedDAO {
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertPlannedMeal(PlannedMeal plannedMeal);
 

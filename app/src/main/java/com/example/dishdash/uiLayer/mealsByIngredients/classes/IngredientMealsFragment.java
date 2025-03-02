@@ -20,32 +20,30 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.dishdash.Connection;
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.Connection;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
-import com.example.dishdash.uiLayer.mealsByCategory.classes.CategoryMealsFragmentArgs;
 import com.example.dishdash.uiLayer.mealsByIngredients.interfaces.IIngredientMealsAdapter;
 import com.example.dishdash.uiLayer.mealsByIngredients.interfaces.IngredientMealsView;
+import com.example.dishdash.uiLayer.helper.GlideImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class IngredientMealsFragment extends Fragment  implements IIngredientMealsAdapter , IngredientMealsView , Connection.NetworkCallbacksListener {
-
-
     private RecyclerView rv_meals_by_ingredient;
     private LottieAnimationView lottie_ingredient;
     private IngredientMealsAdapter ingredientMealsAdapter;
     private IngredientMealsPresenter ingredientMealsPresenter;
     private TextView tv_ingredient_meals_header;
     private Connection connection;
-    private String name;
+    private String ingredientName;
 
     public IngredientMealsFragment() {
     }
@@ -58,7 +56,6 @@ public class IngredientMealsFragment extends Fragment  implements IIngredientMea
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         ((HomeActivity) requireActivity()).showBottomNavigation(false);
         return inflater.inflate(R.layout.fragment_ingredient_meals, container, false);
     }
@@ -66,26 +63,32 @@ public class IngredientMealsFragment extends Fragment  implements IIngredientMea
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        name = IngredientMealsFragmentArgs.fromBundle(getArguments()).getIngredientName();
+
+        ingredientName = IngredientMealsFragmentArgs.fromBundle(getArguments()).getIngredientName();
 
         rv_meals_by_ingredient = view.findViewById(R.id.rv_meals_by_ingredient);
+
         lottie_ingredient = view.findViewById(R.id.lottie_ingredient);
+
         tv_ingredient_meals_header = view.findViewById(R.id.tv_ingredient_meals_header);
 
-        ingredientMealsAdapter = new IngredientMealsAdapter(new ArrayList<>(), requireContext(), this);
+        connection = new Connection(requireContext(), this);
+
         ingredientMealsPresenter = new IngredientMealsPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
                 MealsLocalSourceImpl.getInstance(requireContext())), this);
 
+        ingredientMealsAdapter = new IngredientMealsAdapter(new ArrayList<>(),
+                requireContext(), this,
+                new GlideImageLoader(requireContext()));
+
         setupRecycleView();
-        connection = new Connection(requireContext(), this);
 
         /* Check network state */
         if(!connection.isNetworkAvailable()) {
             onConnectionUnAvailable();
         }
-        connection.register();
 
-        //lottie_category.setVisibility(View.VISIBLE);
+        connection.register();
     }
 
     private void setupRecycleView(){
@@ -117,7 +120,7 @@ public class IngredientMealsFragment extends Fragment  implements IIngredientMea
     @Override
     public void onConnectionAvailable() {
         hideAnimationAndShowPage();
-        ingredientMealsPresenter.getIngredientMeals(name);
+        ingredientMealsPresenter.getIngredientMeals(ingredientName);
         connection.unregister();
     }
 

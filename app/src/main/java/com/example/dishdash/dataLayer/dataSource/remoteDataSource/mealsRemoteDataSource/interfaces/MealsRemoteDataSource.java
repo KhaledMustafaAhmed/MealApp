@@ -27,7 +27,4 @@ public interface MealsRemoteDataSource {
 
     public Single<IngredientList> getAllIngredients(String ingredientCode);
 
-    public Single<MeaList> getAllMeals();
-
-
 }

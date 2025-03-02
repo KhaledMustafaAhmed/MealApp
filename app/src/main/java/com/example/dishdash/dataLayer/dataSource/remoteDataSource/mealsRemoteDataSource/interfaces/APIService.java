@@ -15,9 +15,6 @@ public interface APIService {
     @GET("random.php")
     public Single<MeaList> getRandoMeal();
 
-    @GET("search.php?s=")
-    public Single<MeaList> getAllMeals();
-
     @GET("filter.php")
     public Single<PopularList> getMealsBasedOnCategory(@Query("c") String category);
 

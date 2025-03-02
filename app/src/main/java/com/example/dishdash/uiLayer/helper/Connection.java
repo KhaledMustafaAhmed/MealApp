@@ -1,6 +1,4 @@
-package com.example.dishdash;
-
-import static androidx.core.content.ContextCompat.getSystemService;
+package com.example.dishdash.uiLayer.helper;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -12,6 +10,7 @@ import androidx.annotation.NonNull;
 
 public class Connection  extends ConnectivityManager.NetworkCallback {
     private final Context context;
+
     private final NetworkCallbacksListener networkCallbacksListener;
 
     public Connection(Context context, NetworkCallbacksListener networkCallbacksListener){
@@ -32,7 +31,6 @@ public class Connection  extends ConnectivityManager.NetworkCallback {
     public void onAvailable(@NonNull Network network) {
         super.onAvailable(network);
         networkCallbacksListener.onConnectionAvailable();
-
     }
 
     @Override

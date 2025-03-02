@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
@@ -27,6 +27,7 @@ import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
+import com.example.dishdash.uiLayer.helper.GlideImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,6 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
     private LottieAnimationView lottie_plans;
 
     public PlansFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -50,7 +50,6 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         ((HomeActivity) requireActivity()).showBottomNavigation(true);
         return inflater.inflate(R.layout.fragment_plans, container, false);
     }
@@ -59,21 +58,27 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        lottie_plans = view.findViewById(R.id.lottie_plans);
+
+        rv_weekly_plan_meals = (RecyclerView) view.findViewById(R.id.rv_weekly_plan_meals);
+
         plansPresenter = new PlansPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
                 MealsLocalSourceImpl.getInstance(requireContext())),
                 new FirebaseRepository(new FirebaseRemoteDataSource()),
                 this, new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(requireContext())));
 
-        plansAdapter = new PlansAdapter(requireContext(), this, new ArrayList<>());
+        plansAdapter = new PlansAdapter(requireContext(), this, new ArrayList<>(), new GlideImageLoader(requireContext()));
 
-        lottie_plans = view.findViewById(R.id.lottie_plans);
-        rv_weekly_plan_meals = (RecyclerView) view.findViewById(R.id.rv_weekly_plan_meals);
+        setUpRecycleView();
+
+        plansPresenter.checkUserMode();
+    }
+
+    private void setUpRecycleView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_weekly_plan_meals.setLayoutManager(linearLayoutManager);
         rv_weekly_plan_meals.setAdapter(plansAdapter);
-
-        plansPresenter.checkUserMode();
     }
 
     @Override

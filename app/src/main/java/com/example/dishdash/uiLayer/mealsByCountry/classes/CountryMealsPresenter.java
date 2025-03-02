@@ -13,8 +13,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class CountryMealsPresenter implements CountryMealsContract {
-    private MealsRepository mealsRepository;
-    private ICountryMealsViews iCountryMealsViews;
+    private final MealsRepository mealsRepository;
+    private final ICountryMealsViews iCountryMealsViews;
     public CountryMealsPresenter(MealsRepository mealsRepository,ICountryMealsViews iCountryMealsViews ){
         this.iCountryMealsViews = iCountryMealsViews;
         this.mealsRepository = mealsRepository;
@@ -27,7 +27,6 @@ public class CountryMealsPresenter implements CountryMealsContract {
                 .subscribe(new SingleObserver<PopularList>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -37,7 +36,6 @@ public class CountryMealsPresenter implements CountryMealsContract {
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }

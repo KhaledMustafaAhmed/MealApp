@@ -21,8 +21,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.dishdash.Connection;
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.Connection;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
@@ -32,18 +32,17 @@ import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.Ingredien
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.uiLayer.home.adapters.CategoryAdapter;
 import com.example.dishdash.uiLayer.home.adapters.CountryAdapter;
-import com.example.dishdash.uiLayer.home.classes.HomeFragmentDirections;
 import com.example.dishdash.uiLayer.home.interfaces.ICategory;
 import com.example.dishdash.uiLayer.home.interfaces.ICountry;
 import com.example.dishdash.uiLayer.search.adapters.IngredientsAdapter;
 import com.example.dishdash.uiLayer.search.interfaces.ISearchAdapter;
 import com.example.dishdash.uiLayer.search.interfaces.ISearchVew;
+import com.example.dishdash.uiLayer.helper.GlideImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment implements ISearchVew, ISearchAdapter, ICategory, ICountry, Connection.NetworkCallbacksListener {
-
     private SearchPresenter searchPresenter;
     private IngredientsAdapter ingredientsAdapter;
     private CategoryAdapter categoryAdapter;
@@ -77,11 +76,13 @@ public class SearchFragment extends Fragment implements ISearchVew, ISearchAdapt
         searchPresenter = new SearchPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
                 MealsLocalSourceImpl.getInstance(requireContext())), this);
 
-        ingredientsAdapter = new IngredientsAdapter(requireContext(),new ArrayList<>(), this);
+        ingredientsAdapter = new IngredientsAdapter(requireContext(),new ArrayList<>(), this, new GlideImageLoader(requireContext()));
 
-        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(),this);
+        categoryAdapter = new CategoryAdapter(requireContext(), new ArrayList<>(),this, new GlideImageLoader(requireContext()));
 
         countryAdapter = new CountryAdapter(this, new ArrayList<>());
+
+        connection = new Connection(requireContext(), this);
 
         setUpRecycleView(new LinearLayoutManager(requireContext()), rv_search_ingredients);
         rv_search_ingredients.setAdapter(ingredientsAdapter);
@@ -91,8 +92,6 @@ public class SearchFragment extends Fragment implements ISearchVew, ISearchAdapt
 
         setUpRecycleView(new LinearLayoutManager(requireContext()), rv_search_areas);
         rv_search_areas.setAdapter(countryAdapter);
-
-        connection = new Connection(requireContext(), this);
 
         /* Check network state */
         if(!connection.isNetworkAvailable()) {
@@ -114,6 +113,7 @@ public class SearchFragment extends Fragment implements ISearchVew, ISearchAdapt
                 return false;
             }
         });
+
     }
 
     private void initUI(View view){
@@ -166,7 +166,7 @@ public class SearchFragment extends Fragment implements ISearchVew, ISearchAdapt
                 .navigate(SearchFragmentDirections.actionSearchFragmentToCountryMealsFragment(countryName));
     }
 
-    private void showPagaAndHideAnimation(){
+    private void showPageAndHideAnimation(){
         new Handler(Looper.getMainLooper()).post(()->{
             tv_search_ingredients.setVisibility(VISIBLE);
             rv_search_ingredients.setVisibility(VISIBLE);
@@ -179,7 +179,7 @@ public class SearchFragment extends Fragment implements ISearchVew, ISearchAdapt
     }
     @Override
     public void onConnectionAvailable() {
-        showPagaAndHideAnimation();
+        showPageAndHideAnimation();
         searchPresenter.getAllIngredients("list");
         searchPresenter.getAllCategories("list");
         searchPresenter.getAllCountries("list");

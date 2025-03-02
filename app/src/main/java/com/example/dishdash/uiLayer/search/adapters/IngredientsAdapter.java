@@ -10,23 +10,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.IngredientItem;
 import com.example.dishdash.uiLayer.search.interfaces.ISearchAdapter;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientsViewHolder> {
-    private Context context;
+    private final Context context;
     private List<IngredientItem> ingredientList;
-    private ISearchAdapter iSearchAdapter;
+    private final ISearchAdapter iSearchAdapter;
+    private ImageLoader imageLoader;
     private static final String INGREDIENT_IMAGE_URL = "https://www.themealdb.com/images/ingredients/";
 
-    public IngredientsAdapter(Context context, List<IngredientItem> ingredientList, ISearchAdapter iSearchAdapter) {
+    public IngredientsAdapter(Context context, List<IngredientItem> ingredientList, ISearchAdapter iSearchAdapter, ImageLoader imageLoader) {
         this.context = context;
         this.ingredientList = ingredientList;
         this.iSearchAdapter = iSearchAdapter;
+        this.imageLoader = imageLoader;
         notifyDataSetChanged();
     }
 
@@ -45,9 +47,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public void onBindViewHolder(@NonNull IngredientsAdapter.IngredientsViewHolder holder, int position) {
         holder.tv_ingredients_name_item.setText(ingredientList.get(position).getStrIngredient());
 
-        Glide.with(context)
-                .load(INGREDIENT_IMAGE_URL+ingredientList.get(position).getStrIngredient()+"-Medium.png")
-                .into(holder.iv_ingredients_image_item);
+        imageLoader.loadImage(INGREDIENT_IMAGE_URL+ingredientList.get(position).getStrIngredient()+"-Medium.png", holder.iv_ingredients_image_item);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,8 +63,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     }
 
     public class IngredientsViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_ingredients_image_item;
-        TextView tv_ingredients_name_item;
+         ImageView iv_ingredients_image_item;
+         TextView tv_ingredients_name_item;
         public IngredientsViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_ingredients_name_item =(TextView) itemView.findViewById(R.id.tv_ingredients_name_item);

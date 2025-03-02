@@ -1,7 +1,5 @@
 package com.example.dishdash.uiLayer.authentication.login;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -22,7 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;

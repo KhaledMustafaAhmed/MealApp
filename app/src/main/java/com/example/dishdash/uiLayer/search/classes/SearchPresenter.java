@@ -27,12 +27,10 @@ public class SearchPresenter implements SearchContract {
     private List<CategoryItem> allCategories = new ArrayList<>();
     private List<CountryItem> allCountries = new ArrayList<>();
 
-
     public SearchPresenter(MealsRepository mealsRepository, ISearchVew iSearchVew) {
         this.mealsRepository = mealsRepository;
         this.iSearchVew = iSearchVew;
     }
-
 
     @Override
     public void getAllIngredients(String ingredientCode) {
@@ -67,7 +65,6 @@ public class SearchPresenter implements SearchContract {
                 .subscribe(new SingleObserver<CategoryList>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -78,7 +75,6 @@ public class SearchPresenter implements SearchContract {
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }
@@ -91,7 +87,6 @@ public class SearchPresenter implements SearchContract {
                 .subscribe(new SingleObserver<CountryList>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -102,7 +97,6 @@ public class SearchPresenter implements SearchContract {
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }

@@ -4,29 +4,30 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.uiLayer.mealsByIngredients.interfaces.IIngredientMealsAdapter;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.List;
 
 public class IngredientMealsAdapter extends RecyclerView.Adapter<IngredientMealsAdapter.IngredientViewHolder> {
     private List<PopularItem> meals;
-    private Context context;
-    private IIngredientMealsAdapter iIngredientMealsAdapter;
+    private final Context context;
+    private final IIngredientMealsAdapter iIngredientMealsAdapter;
+    private ImageLoader imageLoader;
 
-    public IngredientMealsAdapter(List<PopularItem> meals, Context context, IIngredientMealsAdapter iIngredientMealsAdapter) {
+    public IngredientMealsAdapter(List<PopularItem> meals, Context context, IIngredientMealsAdapter iIngredientMealsAdapter, ImageLoader imageLoader) {
         this.meals = meals;
         this.context = context;
         this.iIngredientMealsAdapter = iIngredientMealsAdapter;
+        this.imageLoader = imageLoader;
         notifyDataSetChanged();
     }
 
@@ -44,9 +45,8 @@ public class IngredientMealsAdapter extends RecyclerView.Adapter<IngredientMeals
 
     @Override
     public void onBindViewHolder(@NonNull IngredientMealsAdapter.IngredientViewHolder holder, int position) {
-        Glide.with(context)
-                .load(meals.get(position).getStrMealThumb())
-                .into(holder.iv_meal_by_ingredient_item);
+
+        imageLoader.loadImage(meals.get(position).getStrMealThumb(),holder.iv_meal_by_ingredient_item );
 
         holder.tv_meal_by_ingredient_item.setText(meals.get(position).getStrMeal());
 

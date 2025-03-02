@@ -11,12 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
-import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
-import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 import com.example.dishdash.uiLayer.home.interfaces.IPopular;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.List;
 
@@ -24,12 +22,13 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularV
     private static final String TAG = "PopularAdapter";
     private Context context;
     private List<PopularItem> popularList;
-
     private IPopular iPopular;
-    public PopularAdapter(Context context, IPopular iPopular, List<PopularItem> popularList){
+    private ImageLoader imageLoader;
+    public PopularAdapter(Context context, IPopular iPopular, List<PopularItem> popularList, ImageLoader imageLoader){
         this.context = context;
         this.popularList = popularList;
         this.iPopular = iPopular;
+        this.imageLoader = imageLoader;
         notifyDataSetChanged();
     }
 
@@ -48,14 +47,14 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularV
 
     @Override
     public void onBindViewHolder(@NonNull PopularAdapter.PopularViewHolder holder, int position) {
+
         if(popularList.get(position).getStrMealThumb() == null){
             Log.i(TAG, "onBindViewHolder: ");
             holder.iv_popular_meal_item.setImageResource(R.drawable.placeholderpic);
         }else{
-            Glide.with(context)
-                    .load(popularList.get(position).getStrMealThumb())
-                    .into(holder.iv_popular_meal_item);
+            imageLoader.loadImage(popularList.get(position).getStrMealThumb(), holder.iv_popular_meal_item);
         }
+
         holder.tv_popular_meal_item.setText(popularList.get(position).getStrMeal());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -20,15 +20,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.dishdash.Connection;
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.Connection;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
-import com.example.dishdash.uiLayer.mealsByCategory.classes.CategoryMealsFragmentArgs;
 import com.example.dishdash.uiLayer.mealsByCountry.interfaces.ICountryMealsAdapter;
 import com.example.dishdash.uiLayer.mealsByCountry.interfaces.ICountryMealsViews;
 
@@ -63,16 +62,22 @@ public class CountryMealsFragment extends Fragment implements ICountryMealsViews
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         lottie_country = (LottieAnimationView) view.findViewById(R.id.lottie_country);
+
         tv_country_meals_header = (TextView) view.findViewById(R.id.tv_country_meals_header);
 
-        countryName = CountryMealsFragmentArgs.fromBundle(getArguments()).getCountryName();
         rv_meals_by_country = (RecyclerView) view.findViewById(R.id.rv_meals_by_country);
 
-        countryMealsAdapter = new CountryMealsAdapter(this, requireContext(), new ArrayList<>());
-        setupRecycleView();
-        countryMealsPresenter = new CountryMealsPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(getContext())),
+        countryName = CountryMealsFragmentArgs.fromBundle(getArguments()).getCountryName();
+
+        countryMealsPresenter = new CountryMealsPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
+                MealsLocalSourceImpl.getInstance(getContext())),
                 this);
+
+        countryMealsAdapter = new CountryMealsAdapter(this, requireContext(), new ArrayList<>());
+
+        setupRecycleView();
 
         connection  =new Connection(requireContext(), this);
 
@@ -80,6 +85,7 @@ public class CountryMealsFragment extends Fragment implements ICountryMealsViews
         if(!connection.isNetworkAvailable()) {
             onConnectionUnAvailable();
         }
+
         connection.register();
     }
 

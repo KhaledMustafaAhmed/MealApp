@@ -20,8 +20,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.dishdash.Connection;
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.Connection;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
@@ -30,6 +30,7 @@ import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
 import com.example.dishdash.uiLayer.mealsByCategory.interfaces.ICategoryMealsAdapter;
 import com.example.dishdash.uiLayer.mealsByCategory.interfaces.ICategoryMealsView;
+import com.example.dishdash.uiLayer.helper.GlideImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class CategoryMealsFragment extends Fragment implements ICategoryMealsAda
     private CategoryMealsPresenter categoryMealsPresenter;
     private LottieAnimationView lottie_category;
     private TextView tv_category_meals_header;
-    private String name;
+    private String categoryName;
     private Connection connection;
 
     public CategoryMealsFragment() {
@@ -63,13 +64,15 @@ public class CategoryMealsFragment extends Fragment implements ICategoryMealsAda
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        name = CategoryMealsFragmentArgs.fromBundle(getArguments()).getCategoryName();
-
         rv_meals_by_category = (RecyclerView) view.findViewById(R.id.rv_meals_by_category);
+
         lottie_category = (LottieAnimationView) view.findViewById(R.id.lottie_category);
+
         tv_category_meals_header = (TextView) view.findViewById(R.id.tv_category_meals_header);
 
-        categoryMealsAdapter = new CategoryMealsAdapter(this, requireContext(), new ArrayList<>());
+        categoryName = CategoryMealsFragmentArgs.fromBundle(getArguments()).getCategoryName();
+
+        categoryMealsAdapter = new CategoryMealsAdapter(this, requireContext(), new ArrayList<>(), new GlideImageLoader(requireContext()));
 
         categoryMealsPresenter = new CategoryMealsPresenter(this,
                 MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(getContext())));
@@ -81,6 +84,7 @@ public class CategoryMealsFragment extends Fragment implements ICategoryMealsAda
         if(!connection.isNetworkAvailable()) {
             onConnectionUnAvailable();
         }
+
         connection.register();
     }
 
@@ -101,6 +105,7 @@ public class CategoryMealsFragment extends Fragment implements ICategoryMealsAda
     public void receiveCategoryMeals(List<PopularItem> meals) {
         categoryMealsAdapter.setMeals(meals);
     }
+
     private void hideAnimationAndShowPage(){
         new Handler(Looper.getMainLooper()).post(()->{
             tv_category_meals_header.setVisibility(VISIBLE);
@@ -111,7 +116,8 @@ public class CategoryMealsFragment extends Fragment implements ICategoryMealsAda
 
     @Override
     public void onConnectionAvailable() {
-        categoryMealsPresenter.getCategoryMeals(name);
+        hideAnimationAndShowPage();
+        categoryMealsPresenter.getCategoryMeals(categoryName);
         connection.unregister();
     }
 
@@ -120,6 +126,7 @@ public class CategoryMealsFragment extends Fragment implements ICategoryMealsAda
         rv_meals_by_category.setVisibility(GONE);
         lottie_category.setVisibility(VISIBLE);
     }
+
     @Override
     public void onConnectionUnAvailable() {
         hidePageAndShowAnimation();

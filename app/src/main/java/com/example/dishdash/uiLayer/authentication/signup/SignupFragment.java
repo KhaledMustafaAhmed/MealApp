@@ -20,7 +20,7 @@ import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
 import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
-import com.example.dishdash.uiLayer.uiHelper.Triple;
+import com.example.dishdash.uiLayer.helper.Triple;
 
 public class SignupFragment extends Fragment implements ISignup {
     private EditText emailEdit, passwordEdit, confirmPasswordEdit;

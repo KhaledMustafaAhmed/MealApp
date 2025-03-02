@@ -1,22 +1,16 @@
-package com.example.dishdash;
+package com.example.dishdash.uiLayer.helper;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -45,5 +39,4 @@ public class HomeActivity extends AppCompatActivity {
     public void showBottomNavigation(boolean isVisible){
         bottomNavView.setVisibility(isVisible?VISIBLE:GONE);
     }
-//((MainActivity) requireActivity()).showBottomNav(true);
 }

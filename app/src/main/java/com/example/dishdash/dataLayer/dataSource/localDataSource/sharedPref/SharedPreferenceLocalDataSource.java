@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class SharedPreferenceLocalDataSource {
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     private static SharedPreferenceLocalDataSource instance = null;
 

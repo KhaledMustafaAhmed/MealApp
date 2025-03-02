@@ -18,12 +18,7 @@ public interface IHomeView {
 
     public void receiveAllCountriesItems(List<CountryItem> areaList);
 
-    public void receiveMealOfDayNews(boolean flag, String meal_id);
-
     public void doLogout();
-
-    public void guestLogout();
-
 
     public void logoutCheckUserResponse(String user);
 }

@@ -10,24 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
-import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
-import com.example.dishdash.dataLayer.model.pojo.mealsList.MealsItem;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.List;
 
 public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAdapter.FavouriteViewHolder> {
 
     private List<FavouriteMeal> favouriteMeals;
-    private Context context;
-    private IFavouriteAdapter iFavouriteAdapter;
+    private final Context context;
+    private final IFavouriteAdapter iFavouriteAdapter;
+    private ImageLoader imageLoader;
 
-    public FavouriteMealsAdapter(List<FavouriteMeal> favouriteMeals, Context context, IFavouriteAdapter iFavouriteAdapter) {
+    public FavouriteMealsAdapter(List<FavouriteMeal> favouriteMeals, Context context, IFavouriteAdapter iFavouriteAdapter, ImageLoader imageLoader) {
         this.favouriteMeals = favouriteMeals;
         this.context = context;
         this.iFavouriteAdapter = iFavouriteAdapter;
+        this.imageLoader = imageLoader;
         notifyDataSetChanged();
     }
 
@@ -46,9 +46,7 @@ public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAd
     public void onBindViewHolder(@NonNull FavouriteMealsAdapter.FavouriteViewHolder holder, int position) {
         holder.tv_fav_meal_item.setText(favouriteMeals.get(position).getMealsItem().getStrMeal());
 
-        Glide.with(context)
-                .load(favouriteMeals.get(position).getMealsItem().getStrMealThumb())
-                .into(holder.iv_fav_meal_item);
+        imageLoader.loadImage(favouriteMeals.get(position).getMealsItem().getStrMealThumb(), holder.iv_fav_meal_item);
 
         holder.iv_delete_fav_item.setOnClickListener(new View.OnClickListener() {
             @Override

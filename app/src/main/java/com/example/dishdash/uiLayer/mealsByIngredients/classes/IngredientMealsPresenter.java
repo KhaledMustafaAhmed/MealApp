@@ -13,8 +13,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class IngredientMealsPresenter implements IngredientMealsContract {
-    private MealsRepository mealsRepository;
-    private IngredientMealsView ingredientMealsView;
+    private final MealsRepository mealsRepository;
+    private final IngredientMealsView ingredientMealsView;
 
     public IngredientMealsPresenter(MealsRepository mealsRepository, IngredientMealsView ingredientMealsView) {
         this.mealsRepository = mealsRepository;
@@ -29,7 +29,6 @@ public class IngredientMealsPresenter implements IngredientMealsContract {
                 .subscribe(new SingleObserver<PopularList>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -39,7 +38,6 @@ public class IngredientMealsPresenter implements IngredientMealsContract {
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }

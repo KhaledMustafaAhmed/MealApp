@@ -16,7 +16,6 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -25,8 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.bumptech.glide.Glide;
-import com.example.dishdash.Connection;
+import com.example.dishdash.uiLayer.helper.Connection;
 import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
@@ -34,12 +32,11 @@ import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.Shar
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.mealsRemoteDataSource.classes.MealsRemoteSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
-import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MealsItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.example.dishdash.uiLayer.helper.GlideImageLoader;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -56,28 +53,37 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
     private CardView cv_youtube;
     private Connection connection;
     private WebView wv_youtube;
-    private DatePickerDialog datePickerDialog;
     private ConstraintLayout cl_whole_meal_detailed;
     private LottieAnimationView lottie_detaild_meal;
     private Intent inComingIntent;
+    private ImageLoader imageLoader;
     private static final String CATEGORY_PHOTOS_URL = "https://www.themealdb.com/images/category/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_details);
+
         initUI();
 
-        detailedMealAdapter = new DetailedMealAdapter(this, new ArrayList<>());
-        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rv_ingredient_measure.setLayoutManager(linearLayoutManager);
-        rv_ingredient_measure.setAdapter(detailedMealAdapter);
         inComingIntent = getIntent();
+
+        detailedMealAdapter = new DetailedMealAdapter(this, new ArrayList<>());
+
+        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
+
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        rv_ingredient_measure.setLayoutManager(linearLayoutManager);
+
+        rv_ingredient_measure.setAdapter(detailedMealAdapter);
+
         mealDetailsPresenter = new MealDetailsPresenter(this,
                 MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(this)),
                 new FirebaseRepository(new FirebaseRemoteDataSource()),
                 new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(this)));
+
+        imageLoader = new GlideImageLoader(this);
 
         connection = new Connection(this, this);
 
@@ -125,16 +131,12 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
     public void getMealDetails(MealsItem meal) {
         this.meal = meal;
         if(meal.getStrMealThumb() != null){
-            Glide.with(this)
-                    .load(meal.getStrMealThumb())
-                    .into(iv_favourites_toolbar);
+            imageLoader.loadImage(meal.getStrMealThumb(), iv_favourites_toolbar);
         }
 
         if(meal.getStrCategory() != null){
             tv_details_meal_category_name.setText(meal.getStrCategory());
-            Glide.with(this)
-                    .load(CATEGORY_PHOTOS_URL+meal.getStrCategory().toLowerCase()+".png")
-                    .into(iv_meal_details_category);
+            imageLoader.loadImage(CATEGORY_PHOTOS_URL+meal.getStrCategory().toLowerCase()+".png",iv_meal_details_category );
         }
 
         if(meal.getStrArea() != null){
@@ -237,11 +239,11 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         int month = cldr.get(Calendar.MONTH);
         int year = cldr.get(Calendar.YEAR);
 
-        datePickerDialog = new DatePickerDialog(MealDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(MealDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Log.d("TAG", "onDateSet: ");
-               mealDetailsPresenter.addMealToWeeklyPlan(user_id ,meal,mealDetailsPresenter.calcDate(year, monthOfYear, dayOfMonth)) ;
+                mealDetailsPresenter.addMealToWeeklyPlan(user_id, meal, mealDetailsPresenter.calcDate(year, monthOfYear, dayOfMonth));
             }
         }, year, month, day);
 

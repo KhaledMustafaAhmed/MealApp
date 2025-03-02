@@ -5,7 +5,7 @@ import android.util.Patterns;
 import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseCallback;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
-import com.example.dishdash.uiLayer.uiHelper.Triple;
+import com.example.dishdash.uiLayer.helper.Triple;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignupPresenter implements  SignupContract, FirebaseCallback{

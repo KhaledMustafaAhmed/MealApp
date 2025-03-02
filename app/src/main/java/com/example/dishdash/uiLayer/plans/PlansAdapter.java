@@ -1,7 +1,6 @@
 package com.example.dishdash.uiLayer.plans;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,24 +10,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.List;
 
 public class PlansAdapter extends RecyclerView.Adapter<PlansAdapter.PlansViewHolder> {
 
-    private Context context;
+    private final Context context;
     private List<PlannedMeal> plannedMeals;
+    private final IPlansAdapter iPlansAdapter;
+    private ImageLoader imageLoader;
 
-    private IPlansAdapter iPlansAdapter;
 
-
-    public PlansAdapter(Context context, IPlansAdapter iPlansAdapter, List<PlannedMeal> plannedMeals) {
+    public PlansAdapter(Context context, IPlansAdapter iPlansAdapter, List<PlannedMeal> plannedMeals, ImageLoader imageLoader) {
         this.context = context;
         this.plannedMeals = plannedMeals;
         this.iPlansAdapter = iPlansAdapter;
+        this.imageLoader = imageLoader;
         notifyDataSetChanged();
     }
 
@@ -45,9 +45,8 @@ public class PlansAdapter extends RecyclerView.Adapter<PlansAdapter.PlansViewHol
 
     @Override
     public void onBindViewHolder(@NonNull PlansAdapter.PlansViewHolder holder, int position) {
-        Glide.with(context)
-                .load(plannedMeals.get(position).getMealsItem().getStrMealThumb())
-                .into(holder.iv_weekly_plan_meal_item);
+
+        imageLoader.loadImage(plannedMeals.get(position).getMealsItem().getStrMealThumb(), holder.iv_weekly_plan_meal_item);
 
         holder.tv_week_plan_date.setText(plannedMeals.get(position).getDate());
 

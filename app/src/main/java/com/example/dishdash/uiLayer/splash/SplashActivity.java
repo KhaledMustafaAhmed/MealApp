@@ -9,20 +9,17 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.dishdash.HomeActivity;
+import com.example.dishdash.uiLayer.helper.HomeActivity;
 import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPreferenceLocalDataSource;
-import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.FirebaseRemoteDataSource;
-import com.example.dishdash.dataLayer.repository.userRepo.FirebaseRepository;
 
 public class SplashActivity extends AppCompatActivity{
     private ImageView iv_splash_logo, iv_splash_image;
     private TextView tv_splash_header;
     private LottieAnimationView lottie;
-    private static final int SPLASH_TIME_OUT = 4900;
-
+    private static final int SPLASH_TIME_OUT = 6100;
     private SplashPresenter splashPresenter;
 
     @Override
@@ -53,9 +50,9 @@ public class SplashActivity extends AppCompatActivity{
     }
 
     private void startAnimation(){
-        iv_splash_image.animate().translationY(-1600).setDuration(1000).setStartDelay(4000);
-        iv_splash_logo.animate().translationY(1400).setDuration(1000).setStartDelay(4000);
-        tv_splash_header.animate().translationY(1400).setStartDelay(1000).setStartDelay(4000);
-        lottie.animate().translationY(1400).setDuration(1000).setStartDelay(4000);
+        iv_splash_image.animate().translationY(-2500).setDuration(1000).setStartDelay(5000);
+        iv_splash_logo.animate().translationY(2000).setDuration(1000).setStartDelay(5000);
+        tv_splash_header.animate().translationY(2000).setStartDelay(1000).setStartDelay(5000);
+        lottie.animate().translationY(1800).setDuration(1000).setStartDelay(5000);
     }
 }

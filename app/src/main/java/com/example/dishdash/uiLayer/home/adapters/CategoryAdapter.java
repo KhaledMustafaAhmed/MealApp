@@ -11,14 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryItem;
-import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.uiLayer.home.interfaces.ICategory;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private static final String TAG = "CategoryAdapter";
@@ -26,11 +24,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private Context context;
     private List<CategoryItem> categoryList;
     private ICategory iCategory;
+    private ImageLoader imageLoader;
 
-    public CategoryAdapter(Context context, List<CategoryItem> categoryList, ICategory iCategory){
+
+    public CategoryAdapter(Context context, List<CategoryItem> categoryList, ICategory iCategory, ImageLoader imageLoader){
         this.context =context;
         this.categoryList = categoryList;
         this.iCategory = iCategory;
+        this.imageLoader  = imageLoader;
         notifyDataSetChanged();
     }
 
@@ -48,11 +49,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
-        Glide.with(context)
-                .load(CATEGORY_IMAGE_URL+categoryList.get(position).getStrCategory().toLowerCase()+".png")
-                .into(holder.iv_category_image_item);
+
+        imageLoader.loadImage(CATEGORY_IMAGE_URL+categoryList.get(position).getStrCategory().toLowerCase()+".png",holder.iv_category_image_item );
+
         Log.d(TAG, "onBindViewHolder: ");
+
         holder.tv_category_name_item.setText(categoryList.get(position).getStrCategory());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

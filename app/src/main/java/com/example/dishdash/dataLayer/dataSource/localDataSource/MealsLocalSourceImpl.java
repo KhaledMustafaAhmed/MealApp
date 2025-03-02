@@ -11,9 +11,8 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class MealsLocalSourceImpl implements IMealsLocalSource {
-    private FavouritesDAO favouritesDAO;
-    private PlannedDAO plannedDAO;
-
+    private final FavouritesDAO favouritesDAO;
+    private final PlannedDAO plannedDAO;
     private  static MealsLocalSourceImpl instance = null;
     private MealsLocalSourceImpl(Context context) {
         MealsDatabase mealsDatabase = MealsDatabase.getInstance(context.getApplicationContext());

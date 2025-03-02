@@ -20,11 +20,11 @@ import com.example.dishdash.uiLayer.mealsByCountry.interfaces.ICountryMealsViews
 import java.util.List;
 
 public class CountryMealsAdapter extends RecyclerView.Adapter<CountryMealsAdapter.CountryMealsViewHolder> {
-    private ICountryMealsAdapter iCountryMealsAdapter;
+    private final ICountryMealsAdapter iCountryMealsAdapter;
 
     private List<PopularItem> popularList;
 
-    private Context context;
+    private final Context context;
 
     public CountryMealsAdapter(ICountryMealsAdapter iCountryMealsAdapter,Context context, List<PopularItem> popularList){
         this.iCountryMealsAdapter = iCountryMealsAdapter;

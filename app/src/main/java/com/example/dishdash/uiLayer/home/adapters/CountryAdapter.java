@@ -18,7 +18,6 @@ import java.util.List;
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryViewHolder> {
 
     private List<CountryItem> countryList;
-
    private  ICountry iCountry;
 
     public CountryAdapter(ICountry iCountry,List<CountryItem> countryList){

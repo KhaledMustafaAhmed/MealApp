@@ -10,22 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.uiLayer.mealsByCategory.interfaces.ICategoryMealsAdapter;
+import com.example.dishdash.uiLayer.helper.ImageLoader;
 
 import java.util.List;
 
 public class CategoryMealsAdapter extends RecyclerView.Adapter<CategoryMealsAdapter.CategoryMealsViewHolder> {
     private List<PopularItem> meals;
-    private Context context;
-    private ICategoryMealsAdapter iCategoryMealsAdapter;
+    private final Context context;
+    private final ICategoryMealsAdapter iCategoryMealsAdapter;
+    private ImageLoader imageLoader;
 
-    public CategoryMealsAdapter(ICategoryMealsAdapter iCategoryMealsAdapter ,Context context, List<PopularItem> meals){
+    public CategoryMealsAdapter(ICategoryMealsAdapter iCategoryMealsAdapter ,Context context, List<PopularItem> meals, ImageLoader imageLoader){
         this.iCategoryMealsAdapter = iCategoryMealsAdapter;
         this.context = context;
         this.meals = meals;
+        this.imageLoader = imageLoader;
         notifyDataSetChanged();
     }
 
@@ -42,9 +44,9 @@ public class CategoryMealsAdapter extends RecyclerView.Adapter<CategoryMealsAdap
 
     @Override
     public void onBindViewHolder(@NonNull CategoryMealsAdapter.CategoryMealsViewHolder holder, int position) {
-        Glide.with(context)
-                .load(meals.get(position).getStrMealThumb())
-                .into(holder.iv_meal_by_category_item);
+
+        imageLoader.loadImage(meals.get(position).getStrMealThumb(), holder.iv_meal_by_category_item);
+
         holder.tv_meal_by_category_item.setText(meals.get(position).getStrMeal());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -24,13 +24,11 @@ public interface IMealsRepository {
 
     public Single<PopularList> getMealsBasedOnIngredient(String ingredient);
 
-
     public Single<MeaList> getMealByID(String mealID);
 
     public Single<CategoryList> getAllCategories(String categoryCode);
 
     public Single<CountryList> getAllCountries(String countryCode);
-
 
     public Completable addFavMeal(FavouriteMeal favouriteMeals);
 

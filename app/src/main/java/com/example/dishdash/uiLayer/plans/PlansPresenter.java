@@ -17,10 +17,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class PlansPresenter implements IPlansContract{
 
-    private MealsRepository mealsRepository;
-    private FirebaseRepository firebaseRepository;
-    private IPlansViews iPlansViews;
-    private SharedPrefManager sharedPrefManager;
+    private final MealsRepository mealsRepository;
+    private final FirebaseRepository firebaseRepository;
+    private final IPlansViews iPlansViews;
+    private final SharedPrefManager sharedPrefManager;
 
     public PlansPresenter(MealsRepository mealsRepository, FirebaseRepository firebaseRepository, IPlansViews iPlansViews, SharedPrefManager sharedPrefManager) {
         this.mealsRepository = mealsRepository;
@@ -37,7 +37,6 @@ public class PlansPresenter implements IPlansContract{
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -47,7 +46,6 @@ public class PlansPresenter implements IPlansContract{
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }
@@ -60,7 +58,6 @@ public class PlansPresenter implements IPlansContract{
                 .subscribe(new SingleObserver<List<PlannedMeal>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -70,7 +67,6 @@ public class PlansPresenter implements IPlansContract{
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }

@@ -81,9 +81,4 @@ public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
         return apiService.getAllIngredients(ingredientCode);
     }
 
-    @Override
-    public Single<MeaList> getAllMeals() {
-        return null;
-    }
-
 }

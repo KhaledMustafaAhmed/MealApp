@@ -20,7 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class FirebaseRemoteDataSource implements IAuthFirebase {
      private FirebaseAuth firebaseAuth;
 
-
     public FirebaseRemoteDataSource(){
         firebaseAuth = FirebaseAuth.getInstance();
     }
@@ -69,11 +68,9 @@ public class FirebaseRemoteDataSource implements IAuthFirebase {
     public FirebaseUser getCurrentUser(){
         return firebaseAuth.getCurrentUser();
     }
-
     public  String getUserID() {
         return firebaseAuth.getCurrentUser().getUid();
     }
-
 
     public void addFavouriteMeal(String userId, FavouriteMeal favouriteMeal) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -103,6 +100,5 @@ public class FirebaseRemoteDataSource implements IAuthFirebase {
                     Log.d("TAG", "addFavouriteMeal: error");
                 });
     }
-
 
 }

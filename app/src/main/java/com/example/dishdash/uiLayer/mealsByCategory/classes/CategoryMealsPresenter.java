@@ -12,8 +12,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class CategoryMealsPresenter implements CategoryMealsContract {
-    private MealsRepository mealsRepository;
-    private ICategoryMealsView iCategoryMealsView;
+    private final MealsRepository mealsRepository;
+    private final ICategoryMealsView iCategoryMealsView;
 
     public CategoryMealsPresenter(ICategoryMealsView iCategoryMealsView, MealsRepository mealsRepository){
         this.iCategoryMealsView = iCategoryMealsView;
@@ -27,7 +27,6 @@ public class CategoryMealsPresenter implements CategoryMealsContract {
                 .subscribe(new SingleObserver<PopularList>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -37,7 +36,6 @@ public class CategoryMealsPresenter implements CategoryMealsContract {
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
                 });
     }

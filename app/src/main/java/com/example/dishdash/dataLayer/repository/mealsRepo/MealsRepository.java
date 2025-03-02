@@ -105,6 +105,4 @@ public class MealsRepository implements IMealsRepository{
     public Single<IngredientList> getAllIngredients(String ingredientCode) {
         return mealsRemoteSourceImpl.getAllIngredients(ingredientCode);
     }
-
-
 }

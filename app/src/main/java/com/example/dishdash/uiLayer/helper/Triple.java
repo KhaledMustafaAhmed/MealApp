@@ -1,4 +1,4 @@
-package com.example.dishdash.uiLayer.uiHelper;
+package com.example.dishdash.uiLayer.helper;
 
 public class Triple <F,S,T>{
     private final F first;
