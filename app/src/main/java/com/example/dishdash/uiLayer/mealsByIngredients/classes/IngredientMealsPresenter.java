@@ -1,27 +1,29 @@
-package com.example.dishdash.uiLayer.mealsByCategory.classes;
+package com.example.dishdash.uiLayer.mealsByIngredients.classes;
 
+import com.example.dishdash.dataLayer.model.pojo.ingredientsCustomPojo.IngredientList;
 import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularList;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
-import com.example.dishdash.uiLayer.mealsByCategory.interfaces.CategoryMealsContract;
 import com.example.dishdash.uiLayer.mealsByCategory.interfaces.ICategoryMealsView;
+import com.example.dishdash.uiLayer.mealsByIngredients.interfaces.IngredientMealsContract;
+import com.example.dishdash.uiLayer.mealsByIngredients.interfaces.IngredientMealsView;
 
-import io.reactivex.Observer;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class CategoryMealsPresenter implements CategoryMealsContract {
+public class IngredientMealsPresenter implements IngredientMealsContract {
     private MealsRepository mealsRepository;
-    private ICategoryMealsView iCategoryMealsView;
+    private IngredientMealsView ingredientMealsView;
 
-    public CategoryMealsPresenter(ICategoryMealsView iCategoryMealsView, MealsRepository mealsRepository){
-        this.iCategoryMealsView = iCategoryMealsView;
+    public IngredientMealsPresenter(MealsRepository mealsRepository, IngredientMealsView ingredientMealsView) {
         this.mealsRepository = mealsRepository;
+        this.ingredientMealsView = ingredientMealsView;
     }
+
     @Override
-    public void getCategoryMeals(String categoryName) {
-        mealsRepository.getMealsBasedOnCategory(categoryName)
+    public void getIngredientMeals(String name) {
+        mealsRepository.getMealsBasedOnIngredient(name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<PopularList>() {
@@ -32,7 +34,7 @@ public class CategoryMealsPresenter implements CategoryMealsContract {
 
                     @Override
                     public void onSuccess(PopularList popularList) {
-                        iCategoryMealsView.receiveCategoryMeals(popularList.getPopularItemList());
+                        ingredientMealsView.receiveIngredientMeals(popularList.getPopularItemList());
                     }
 
                     @Override

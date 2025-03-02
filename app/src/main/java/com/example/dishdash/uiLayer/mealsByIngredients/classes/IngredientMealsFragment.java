@@ -1,4 +1,4 @@
-package com.example.dishdash.uiLayer.mealsByCountry.classes;
+package com.example.dishdash.uiLayer.mealsByIngredients.classes;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -29,23 +29,25 @@ import com.example.dishdash.dataLayer.model.pojo.popularCustomPojo.PopularItem;
 import com.example.dishdash.dataLayer.repository.mealsRepo.MealsRepository;
 import com.example.dishdash.uiLayer.mealDetails.MealDetailsActivity;
 import com.example.dishdash.uiLayer.mealsByCategory.classes.CategoryMealsFragmentArgs;
-import com.example.dishdash.uiLayer.mealsByCountry.interfaces.ICountryMealsAdapter;
-import com.example.dishdash.uiLayer.mealsByCountry.interfaces.ICountryMealsViews;
+import com.example.dishdash.uiLayer.mealsByIngredients.interfaces.IIngredientMealsAdapter;
+import com.example.dishdash.uiLayer.mealsByIngredients.interfaces.IngredientMealsView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CountryMealsFragment extends Fragment implements ICountryMealsViews, ICountryMealsAdapter, Connection.NetworkCallbacksListener {
 
-    private RecyclerView rv_meals_by_country;
-    private CountryMealsAdapter countryMealsAdapter;
-    private LottieAnimationView lottie_country;
-    private TextView tv_country_meals_header;
-    private CountryMealsPresenter countryMealsPresenter;
+public class IngredientMealsFragment extends Fragment  implements IIngredientMealsAdapter , IngredientMealsView , Connection.NetworkCallbacksListener {
+
+
+    private RecyclerView rv_meals_by_ingredient;
+    private LottieAnimationView lottie_ingredient;
+    private IngredientMealsAdapter ingredientMealsAdapter;
+    private IngredientMealsPresenter ingredientMealsPresenter;
+    private TextView tv_ingredient_meals_header;
     private Connection connection;
-    private String countryName;
+    private String name;
 
-    public CountryMealsFragment() {
+    public IngredientMealsFragment() {
     }
 
     @Override
@@ -56,68 +58,73 @@ public class CountryMealsFragment extends Fragment implements ICountryMealsViews
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         ((HomeActivity) requireActivity()).showBottomNavigation(false);
-        return inflater.inflate(R.layout.fragment_country_meals, container, false);
+        return inflater.inflate(R.layout.fragment_ingredient_meals, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lottie_country = (LottieAnimationView) view.findViewById(R.id.lottie_country);
-        tv_country_meals_header = (TextView) view.findViewById(R.id.tv_country_meals_header);
+        name = IngredientMealsFragmentArgs.fromBundle(getArguments()).getIngredientName();
 
-        countryName = CountryMealsFragmentArgs.fromBundle(getArguments()).getCountryName();
-        rv_meals_by_country = (RecyclerView) view.findViewById(R.id.rv_meals_by_country);
+        rv_meals_by_ingredient = view.findViewById(R.id.rv_meals_by_ingredient);
+        lottie_ingredient = view.findViewById(R.id.lottie_ingredient);
+        tv_ingredient_meals_header = view.findViewById(R.id.tv_ingredient_meals_header);
 
-        countryMealsAdapter = new CountryMealsAdapter(this, requireContext(), new ArrayList<>());
+        ingredientMealsAdapter = new IngredientMealsAdapter(new ArrayList<>(), requireContext(), this);
+        ingredientMealsPresenter = new IngredientMealsPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(),
+                MealsLocalSourceImpl.getInstance(requireContext())), this);
+
         setupRecycleView();
-        countryMealsPresenter = new CountryMealsPresenter(MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(getContext())),
-                this);
-
-        connection  =new Connection(requireContext(), this);
+        connection = new Connection(requireContext(), this);
 
         /* Check network state */
         if(!connection.isNetworkAvailable()) {
             onConnectionUnAvailable();
         }
         connection.register();
+
+        //lottie_category.setVisibility(View.VISIBLE);
     }
 
     private void setupRecycleView(){
         GridLayoutManager gridLayoutManager  = new GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, true);
-        rv_meals_by_country.setLayoutManager(gridLayoutManager);
-        rv_meals_by_country.setAdapter(countryMealsAdapter);
-    }
-    @Override
-    public void receiveCountryMeals(List<PopularItem> meals) {
-        countryMealsAdapter.setPopularList(meals);
+        rv_meals_by_ingredient.setLayoutManager(gridLayoutManager);
+        rv_meals_by_ingredient.setAdapter(ingredientMealsAdapter);
     }
 
     @Override
-    public void onCountryMealClicked(String mealID) {
+    public void onIngredientMealClicked(String meal_id) {
         Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
-        intent.putExtra("MEAL_ID",mealID);
+        intent.putExtra("MEAL_ID", meal_id);
         startActivity(intent);
+    }
+
+    @Override
+    public void receiveIngredientMeals(List<PopularItem> meals) {
+        ingredientMealsAdapter.setMeals(meals);
     }
 
     private void hideAnimationAndShowPage(){
         new Handler(Looper.getMainLooper()).post(()->{
-            tv_country_meals_header.setVisibility(VISIBLE);
-            rv_meals_by_country.setVisibility(VISIBLE);
-            lottie_country.setVisibility(GONE);
+            tv_ingredient_meals_header.setVisibility(VISIBLE);
+            rv_meals_by_ingredient.setVisibility(VISIBLE);
+            lottie_ingredient.setVisibility(GONE);
         });
     }
+
     @Override
     public void onConnectionAvailable() {
         hideAnimationAndShowPage();
-        countryMealsPresenter.getMealsBasedOnCountries(countryName);
+        ingredientMealsPresenter.getIngredientMeals(name);
         connection.unregister();
     }
 
     private void hidePageAndShowAnimation(){
-        tv_country_meals_header.setVisibility(GONE);
-        rv_meals_by_country.setVisibility(GONE);
-        lottie_country.setVisibility(VISIBLE);
+        tv_ingredient_meals_header.setVisibility(GONE);
+        rv_meals_by_ingredient.setVisibility(GONE);
+        lottie_ingredient.setVisibility(VISIBLE);
     }
     @Override
     public void onConnectionUnAvailable() {

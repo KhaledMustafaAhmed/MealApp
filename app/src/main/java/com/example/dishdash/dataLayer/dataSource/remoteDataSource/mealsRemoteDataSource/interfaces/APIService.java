@@ -15,11 +15,17 @@ public interface APIService {
     @GET("random.php")
     public Single<MeaList> getRandoMeal();
 
+    @GET("search.php?s=")
+    public Single<MeaList> getAllMeals();
+
     @GET("filter.php")
     public Single<PopularList> getMealsBasedOnCategory(@Query("c") String category);
 
     @GET("filter.php")
     public Single<PopularList> getMealsBasedOnCountry(@Query("a") String country);
+
+    @GET("filter.php")
+    public Single<PopularList> getMealsBasedOnIngredient(@Query("i") String ingredient);
 
     @GET("lookup.php")
     public Single<MeaList> getMealByID(@Query("i") String mealID);

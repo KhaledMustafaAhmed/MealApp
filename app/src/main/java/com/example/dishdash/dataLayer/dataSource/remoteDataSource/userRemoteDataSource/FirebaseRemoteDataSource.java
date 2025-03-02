@@ -8,6 +8,7 @@ import com.example.dishdash.dataLayer.model.User;
 import com.example.dishdash.dataLayer.model.entities.FavouriteMeal;
 import com.example.dishdash.dataLayer.model.entities.PlannedMeal;
 import com.example.dishdash.dataLayer.repository.userRepo.FirebaseCallback;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -17,7 +18,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseRemoteDataSource implements IAuthFirebase {
-     FirebaseAuth firebaseAuth;
+     private FirebaseAuth firebaseAuth;
+
 
     public FirebaseRemoteDataSource(){
         firebaseAuth = FirebaseAuth.getInstance();
@@ -101,4 +103,6 @@ public class FirebaseRemoteDataSource implements IAuthFirebase {
                     Log.d("TAG", "addFavouriteMeal: error");
                 });
     }
+
+
 }

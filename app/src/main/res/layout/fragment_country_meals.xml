@@ -12,6 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lottie_country"
+            android:visibility="gone"
+            app:lottie_rawRes="@raw/lose"/>
+
         <TextView
             android:id="@+id/tv_country_meals_header"
             android:textColor="@color/pink"
@@ -34,6 +41,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_country_meals_header"
             android:layout_marginTop="@dimen/_10sdp"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

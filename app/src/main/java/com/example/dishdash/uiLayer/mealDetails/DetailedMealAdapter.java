@@ -19,7 +19,7 @@ import java.util.List;
 public class DetailedMealAdapter extends RecyclerView.Adapter<DetailedMealAdapter.DetailedMealAdapterViewHolder> {
 
     private List<Pair<String,String>> IngredientsAndMeasures;
-    Context context;
+    private Context context;
     private static final String INGREDIENTS_BASE_URL = "https://www.themealdb.com/images/ingredients/";
 
     public DetailedMealAdapter(Context context,List<Pair<String,String>> ingredientsAndMeasures){

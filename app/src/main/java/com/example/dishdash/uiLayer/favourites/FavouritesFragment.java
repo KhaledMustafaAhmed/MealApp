@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.dishdash.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
@@ -52,6 +53,7 @@ public class FavouritesFragment extends Fragment implements IFavouriteAdapter, I
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ((HomeActivity) requireActivity()).showBottomNavigation(true);
         return inflater.inflate(R.layout.fragment_favourites, container, false);
     }
 

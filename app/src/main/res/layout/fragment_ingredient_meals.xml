@@ -6,22 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/_10sdp"
-    tools:context=".uiLayer.mealsByCategory.classes.CategoryMealsFragment">
+    tools:context=".uiLayer.mealsByIngredients.classes.IngredientMealsFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_ingredient_meal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/lottie_category"
+            android:id="@+id/lottie_ingredient"
             android:visibility="gone"
             app:lottie_rawRes="@raw/lose"/>
 
         <TextView
-            android:id="@+id/tv_category_meals_header"
+            android:id="@+id/tv_ingredient_meals_header"
             android:textColor="@color/pink"
             android:fontFamily="@font/bomb"
             android:textSize="@dimen/_12ssp"
@@ -33,13 +34,14 @@
             android:layout_marginTop="@dimen/_28sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_meals_by_category"
+            android:id="@+id/rv_meals_by_ingredient"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_category_meals_header"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ingredient_meals_header"
             android:layout_marginTop="@dimen/_10sdp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

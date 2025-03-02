@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
     id("androidx.navigation.safeargs")
+
 }
 
 android {
@@ -111,5 +112,10 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     implementation("com.google.code.gson:gson:2.12.1")
+
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+
 
 }

@@ -1,5 +1,8 @@
 package com.example.dishdash;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -24,7 +27,6 @@ public class HomeActivity extends AppCompatActivity {
     private NavController navController;
     private SharedPrefManager sharedPrefManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,4 +42,8 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavView, navController);
     }
 
+    public void showBottomNavigation(boolean isVisible){
+        bottomNavView.setVisibility(isVisible?VISIBLE:GONE);
+    }
+//((MainActivity) requireActivity()).showBottomNav(true);
 }

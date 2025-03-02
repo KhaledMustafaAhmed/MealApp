@@ -1,11 +1,17 @@
 package com.example.dishdash.uiLayer.mealDetails;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,10 +19,14 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.example.dishdash.Connection;
 import com.example.dishdash.MainActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
@@ -35,17 +45,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MealDetailsActivity extends AppCompatActivity implements IMealDetailsView {
-    ImageView iv_favourites_toolbar, iv_meal_details_category, iv_meal_details_area;
-    FloatingActionButton fab_favourite, fab_calender;
-    TextView tv_details_meal_category_name, tv_details_meal_area_name, tv_instruction_details;
-    RecyclerView rv_ingredient_measure;
-    MealDetailsPresenter mealDetailsPresenter;
-    DetailedMealAdapter detailedMealAdapter;
-    MealsItem meal;
-
-    DatePickerDialog datePickerDialog;
-
+public class MealDetailsActivity extends AppCompatActivity implements IMealDetailsView, Connection.NetworkCallbacksListener {
+    private ImageView iv_favourites_toolbar, iv_meal_details_category, iv_meal_details_area;
+    private FloatingActionButton fab_favourite, fab_calender;
+    private TextView tv_details_meal_category_name, tv_details_meal_area_name, tv_instruction_details;
+    private RecyclerView rv_ingredient_measure;
+    private MealDetailsPresenter mealDetailsPresenter;
+    private DetailedMealAdapter detailedMealAdapter;
+    private MealsItem meal;
+    private CardView cv_youtube;
+    private Connection connection;
+    private WebView wv_youtube;
+    private DatePickerDialog datePickerDialog;
+    private ConstraintLayout cl_whole_meal_detailed;
+    private LottieAnimationView lottie_detaild_meal;
+    private Intent inComingIntent;
     private static final String CATEGORY_PHOTOS_URL = "https://www.themealdb.com/images/category/";
 
     @Override
@@ -59,13 +73,20 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv_ingredient_measure.setLayoutManager(linearLayoutManager);
         rv_ingredient_measure.setAdapter(detailedMealAdapter);
-        Intent inComingIntent = getIntent();
+        inComingIntent = getIntent();
         mealDetailsPresenter = new MealDetailsPresenter(this,
                 MealsRepository.getInstance(MealsRemoteSourceImpl.getInstance(), MealsLocalSourceImpl.getInstance(this)),
                 new FirebaseRepository(new FirebaseRemoteDataSource()),
                 new SharedPrefManager(SharedPreferenceLocalDataSource.getInstance(this)));
 
-        mealDetailsPresenter.getMeal(inComingIntent.getStringExtra("MEAL_ID"));
+        connection = new Connection(this, this);
+
+        /* Check network state */
+        if(!connection.isNetworkAvailable()) {
+            onConnectionUnAvailable();
+        }
+        connection.register();
+
         setClickListenersForButtons();
     }
 
@@ -79,6 +100,10 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         tv_details_meal_area_name =(TextView) findViewById(R.id.tv_details_meal_area_name);
         tv_instruction_details =(TextView) findViewById(R.id.tv_instruction_details);
         rv_ingredient_measure =(RecyclerView) findViewById(R.id.rv_ingredient_measure);
+        wv_youtube = (WebView) findViewById(R.id.wv_youtube);
+        cv_youtube = (CardView) findViewById(R.id.cv_youtube);
+        cl_whole_meal_detailed = (ConstraintLayout) findViewById(R.id.cl_whole_meal_detailed);
+        lottie_detaild_meal = (LottieAnimationView) findViewById(R.id.lottie_detaild_meal);
     }
 
     private void setClickListenersForButtons(){
@@ -119,6 +144,19 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
 
         if(meal.getStrInstructions() != null){
             tv_instruction_details.setText(meal.getStrInstructions());
+        }
+
+        if (meal.getStrYoutube() != null) {
+            String youtubeUrl = meal.getStrYoutube().replace("watch?v=", "embed/");
+            WebSettings webSettings = wv_youtube.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setMediaPlaybackRequiresUserGesture(false);
+            webSettings.setDomStorageEnabled(true);
+            String html = "<iframe width=\"100%\" height=\"100%\" src=\"" + youtubeUrl + "\" frameborder=\"0\" allowfullscreen></iframe>";
+            wv_youtube.loadData(html, "text/html", "utf-8");
+            wv_youtube.setWebChromeClient(new WebChromeClient());
+        } else{
+            cv_youtube.setVisibility(GONE);
         }
         detailedMealAdapter.setIngredientsAndMeasures(meal.getIngredientsAndMeasures(meal));
     }
@@ -227,4 +265,36 @@ public class MealDetailsActivity extends AppCompatActivity implements IMealDetai
         return  builder.create();
     }
 
+    private void showPageAndHideAnimation(){
+        iv_favourites_toolbar.setVisibility(VISIBLE);
+        fab_favourite.setVisibility(VISIBLE);
+        fab_calender.setVisibility(VISIBLE);
+        cl_whole_meal_detailed.setVisibility(VISIBLE);
+        lottie_detaild_meal.setVisibility(GONE);
+    }
+    @Override
+    public void onConnectionAvailable() {
+        showPageAndHideAnimation();
+        mealDetailsPresenter.getMeal(inComingIntent.getStringExtra("MEAL_ID"));
+        connection.unregister();
+    }
+
+    private void hidePageAndShowAnimation(){
+        iv_favourites_toolbar.setVisibility(GONE);
+        fab_favourite.setVisibility(GONE);
+        fab_calender.setVisibility(GONE);
+        cl_whole_meal_detailed.setVisibility(GONE);
+        lottie_detaild_meal.setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void onConnectionUnAvailable() {
+        hidePageAndShowAnimation();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        connection.unregister();
+    }
 }

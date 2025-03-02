@@ -22,6 +22,8 @@ public interface IMealsRepository {
 
     public Single<PopularList> getMealsBasedOnCountry(String country);
 
+    public Single<PopularList> getMealsBasedOnIngredient(String ingredient);
+
 
     public Single<MeaList> getMealByID(String mealID);
 

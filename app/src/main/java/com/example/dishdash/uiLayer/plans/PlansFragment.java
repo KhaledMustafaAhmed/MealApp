@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.dishdash.HomeActivity;
 import com.example.dishdash.R;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.MealsLocalSourceImpl;
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
@@ -40,7 +41,6 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +51,7 @@ public class PlansFragment extends Fragment implements IPlansAdapter, IPlansView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ((HomeActivity) requireActivity()).showBottomNavigation(true);
         return inflater.inflate(R.layout.fragment_plans, container, false);
     }
 

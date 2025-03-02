@@ -17,6 +17,8 @@ public interface MealsRemoteDataSource {
 
     public Single<PopularList> getMealsBasedOnCountry(String country);
 
+    public Single<PopularList> getMealsBasedOnIngredient(String ingredient);
+
     public Single<MeaList> getMealByID(String mealID);
 
     public Single<CategoryList> getAllCategories(String categoryCode);
@@ -24,6 +26,8 @@ public interface MealsRemoteDataSource {
     public Single<CountryList> getAllCountries(String countryCode);
 
     public Single<IngredientList> getAllIngredients(String ingredientCode);
+
+    public Single<MeaList> getAllMeals();
 
 
 }

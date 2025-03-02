@@ -7,6 +7,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.example.dishdash.dataLayer.dataSource.localDataSource.sharedPref.SharedPrefManager;
+import com.example.dishdash.dataLayer.dataSource.remoteDataSource.userRemoteDataSource.GoogleAuth;
 import com.example.dishdash.dataLayer.model.pojo.areaCustomPojo.CountryList;
 import com.example.dishdash.dataLayer.model.pojo.categoryCustomPojo.CategoryList;
 import com.example.dishdash.dataLayer.model.pojo.mealsList.MeaList;
@@ -28,15 +29,17 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomePresenter implements HomeContract {
     private static final String TAG = "HomePresenter";
-    IHomeView iHomeView;
-    MealsRepository mealsRepository;
-    FirebaseRepository firebaseRepository;
-    SharedPrefManager sharedPrefManager;
+    private IHomeView iHomeView;
+    private MealsRepository mealsRepository;
+    private FirebaseRepository firebaseRepository;
+    private SharedPrefManager sharedPrefManager;
+   // private GoogleAuth googleAuth;
     public HomePresenter(IHomeView iHomeView,MealsRepository mealsRepository, FirebaseRepository firebaseRepository, SharedPrefManager sharedPrefManager){
         this.iHomeView = iHomeView;
         this.mealsRepository = mealsRepository;
         this.firebaseRepository = firebaseRepository;
         this.sharedPrefManager = sharedPrefManager;
+       // this.googleAuth  =googleAuth;
     }
 
     @Override
@@ -135,6 +138,7 @@ public class HomePresenter implements HomeContract {
     @Override
     public void logout() {
         firebaseRepository.logout();
+
         sharedPrefManager.setUserId("GUEST");
         iHomeView.doLogout();
     }

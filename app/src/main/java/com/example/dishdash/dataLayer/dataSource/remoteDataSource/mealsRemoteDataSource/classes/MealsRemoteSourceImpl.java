@@ -57,6 +57,11 @@ public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
     }
 
     @Override
+    public Single<PopularList> getMealsBasedOnIngredient(String ingredient) {
+        return apiService.getMealsBasedOnIngredient(ingredient);
+    }
+
+    @Override
     public Single<MeaList> getMealByID(String mealID) {
         return apiService.getMealByID(mealID);
     }
@@ -74,6 +79,11 @@ public class MealsRemoteSourceImpl implements MealsRemoteDataSource {
     @Override
     public Single<IngredientList> getAllIngredients(String ingredientCode) {
         return apiService.getAllIngredients(ingredientCode);
+    }
+
+    @Override
+    public Single<MeaList> getAllMeals() {
+        return null;
     }
 
 }

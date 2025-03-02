@@ -43,4 +43,6 @@
     <string name="all_ingredients">All Ingredients</string>
     <string name="all_categories">All Categories</string>
     <string name="all_countries">All Countries</string>
+    <string name="hi_chief">Hi, Chief!</string>
+    <string name="default_web_client_id">823975160432-r6g30in1fnrgveuji0uh6svujqft6oo6.apps.googleusercontent.com</string>
 </resources>
